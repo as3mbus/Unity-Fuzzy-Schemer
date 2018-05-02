@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using UnityEngine;
+using as3mbus.Open_Fuzzy_Scenario.Scripts.Object;
 
 namespace as3mbus.Open_Fuzzy_Scenario.Editor.Test
 {
@@ -9,27 +10,14 @@ namespace as3mbus.Open_Fuzzy_Scenario.Editor.Test
       [Test]
       public void testIsExist()
       {
-        var test = new TestObj();
-        test.craft();
-        Assert.AreEqual(true,test.exist);
+        var test = new linguistic_Variable();
+        Assert.AreEqual(true,test!=null);
       } 
       [Test]
       public void testCalculate()
       {
-        var test = new TestObj();
-        test.craft();
-        Assert.AreEqual(true,test.exist);
+        var test = new linguistic_Variable();
+        Assert.AreEqual(true,test!=null);
       } 
-      public class TestObj
-      {
-          public bool exist=false;
-          public TestObj()
-          {
-          }
-          public void craft()
-          {
-              this.exist=true;
-          }
-      }
     }
 }
