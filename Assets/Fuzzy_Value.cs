@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace as3mbus.Open_Fuzzy_Scenario.Scripts.Object
+namespace as3mbus.Open_Fuzzy_Scenario.Scripts.Objects
 {
     public class linguistic_Variable 
     {

@@ -1,6 +1,8 @@
-﻿using NUnit.Framework;
+﻿using System.Data;
+using NUnit.Framework;
 using UnityEngine;
-using as3mbus.Open_Fuzzy_Scenario.Scripts.Object;
+using as3mbus.Open_Fuzzy_Scenario.Scripts.Objects;
+using as3mbus.Open_Fuzzy_Scenario.Scripts.Statics;
 
 namespace as3mbus.Open_Fuzzy_Scenario.Editor.Test
 {
@@ -17,7 +19,8 @@ namespace as3mbus.Open_Fuzzy_Scenario.Editor.Test
       public void testCalculate()
       {
         var test = new linguistic_Variable();
-        Assert.AreEqual(true,test!=null);
+        double v = Eval.Evaluate("3 * (2+4)");
+        Assert.AreEqual(18,v);
       } 
     }
 }
