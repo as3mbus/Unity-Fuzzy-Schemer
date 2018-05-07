@@ -9,7 +9,7 @@
         },
         {
             "Name" : "Medium",
-            "MembershipFunction" : "a3+2+1"
+            "MembershipFunction" : "a*3+2+1"
         },
         {
             "Name" : "Low",

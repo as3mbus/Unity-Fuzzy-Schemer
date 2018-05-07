@@ -1,24 +1,47 @@
 ﻿using System.Data;
 using NUnit.Framework;
 using UnityEngine;
-using as3mbus.Open_Fuzzy_Scenario.Scripts.Objects;
-using as3mbus.Open_Fuzzy_Scenario.Scripts.Statics;
+using as3mbus.OpenFuzzyScenario.Scripts.Objects;
+using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 
-namespace as3mbus.Open_Fuzzy_Scenario.Editor.Test
+namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
     [TestFixture]
     public class Test_Fuzzy_Value 
     {
+      TextAsset MembershipFunctTextAsset;
+      LinguisticVariable test;
+      [SetUp]
+      public void setup()
+      {
+          TextAsset MembershipFunctTextAsset = 
+              Resources.Load("MembershipFunctions") as TextAsset;
+          test = new LinguisticVariable();
+          test.loadMembershipFunction(MembershipFunctTextAsset.text);
+      }
       [Test]
       public void testIsExist()
       {
-        var test = new Linguistic_Variable();
         Assert.AreEqual(true,test!=null);
       } 
       [Test]
-      public void testConstructFromJson()
+      public void testLoadMembershipFunction()
       {
-          
+          TextAsset MembershipFunctTextAsset = 
+              Resources.Load("MembershipFunctions") as TextAsset;
+          LinguisticVariable test = new LinguisticVariable();
+          test.loadMembershipFunction(MembershipFunctTextAsset.text);
+          Assert.AreEqual("0.1",test.MFVersion);
+          Assert.AreEqual("Health",test.Name);
+          Assert.AreEqual("a+3/20",test.linguisticMembershipFunctions["High"]);
+          Assert.AreEqual("a*3+2+1",test.linguisticMembershipFunctions["Medium"]);
+          Assert.AreEqual("32-70",test.linguisticMembershipFunctions["Low"]);
+      }
+      [Test]
+      public void testConstructFromMF()
+      {
+          test.Fuzzification(20);
+          Assert.AreEqual(20.15,test.linguisticValue["High"]);
       }
     }
     [TestFixture]
@@ -27,8 +50,8 @@ namespace as3mbus.Open_Fuzzy_Scenario.Editor.Test
       [Test]
       public void testCalculate()
       {
-        double v = Eval.Evaluate("3 * (2+4)");
-        Assert.AreEqual(18,v);
+        double v = Eval.Evaluate("20+3/20");
+        Assert.AreEqual(20.15,v);
       } 
       [Test]
       public void testReadFile()
@@ -38,6 +61,7 @@ namespace as3mbus.Open_Fuzzy_Scenario.Editor.Test
                 + asset.text);
         Assert.AreEqual(typeof(string),asset.text.GetType());
       }
+
       [Test]
       public void testJsonParse()
       {
