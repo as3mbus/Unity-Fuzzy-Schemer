@@ -1,15 +1,19 @@
 using System.Data;
-namespace as3mbus.Open_Fuzzy_Scenario.Scripts.Statics
+using System.Xml.XPath;
+using System.Text.RegularExpressions;
+using UnityEngine;
+namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
 {
     public static class Eval
     {
       public static double Evaluate(string expression) 
       {
-        var loDataTable = new DataTable();
-        var loDataColumn = new DataColumn("Eval", typeof (double), expression);
-        loDataTable.Columns.Add(loDataColumn);
-        loDataTable.Rows.Add(0);
-        return (double) (loDataTable.Rows[0]["Eval"]);
+         var doc = new XPathDocument(new System.IO.StringReader("<r/>"));
+         var nav = doc.CreateNavigator();
+         var newString = expression;
+         newString = (new Regex(@"([\+\-\*])")).Replace(newString, " ${1} ");
+         newString = newString.Replace("/", " div ").Replace("%", " mod ");
+         return (double)nav.Evaluate("number(" + newString + ")");
       }
     }
 }
