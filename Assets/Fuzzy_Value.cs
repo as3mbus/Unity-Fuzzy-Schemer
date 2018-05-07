@@ -23,6 +23,13 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         public Dictionary<string,string> linguisticMembershipFunctions = 
             new Dictionary<string, string>();
 
+        private List<string> linguisticRule = 
+            new List<string>();
+        public List<string> Rule
+        {
+            get { return linguisticRule; }
+            set { linguisticRule = value; }
+        }
 
         public void loadMembershipFunction(string JsonData)
         {
@@ -33,11 +40,19 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             switch (MFVersion)
             {
                 case "0.1":
-                    this.linguisticName= MFJSO.GetField("LinguisticVariable").str; 
-                    foreach (JSONObject MF in MFJSO.GetField("LinguisticValues").list)
+                    this.linguisticName = 
+                        MFJSO.GetField("LinguisticVariable").str; 
+                    foreach (JSONObject MF in 
+                            MFJSO.GetField("LinguisticValues").list)
                     {
-                        //Debug.Log(MF.GetField("Name").str+"->"+MF.GetField("MembershipFunction").str);
-                        this.linguisticMembershipFunctions.Add(MF.GetField("Name").str,MF.GetField("MembershipFunction").str);
+                        this.linguisticMembershipFunctions.Add(
+                                MF.GetField("Name").str,
+                                MF.GetField("MembershipFunction").str);
+                    }
+                    foreach (JSONObject Rule in 
+                            MFJSO.GetField("LinguisticRule").list)
+                    {
+                        this.linguisticRule.Add(Rule.str);
                     }
                     break;
                 default:

@@ -12,7 +12,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
       TextAsset MembershipFunctTextAsset;
       LinguisticVariable test;
       [SetUp]
-      public void setup()
+          public void setup()
       {
           TextAsset MembershipFunctTextAsset = 
               Resources.Load("MembershipFunctions") as TextAsset;
@@ -32,16 +32,38 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
           LinguisticVariable test = new LinguisticVariable();
           test.loadMembershipFunction(MembershipFunctTextAsset.text);
           Assert.AreEqual("0.1",test.MFVersion);
-          Assert.AreEqual("Health",test.Name);
-          Assert.AreEqual("a+3/20",test.linguisticMembershipFunctions["High"]);
-          Assert.AreEqual("a*3+2+1",test.linguisticMembershipFunctions["Medium"]);
-          Assert.AreEqual("32-70",test.linguisticMembershipFunctions["Low"]);
+          Assert.AreEqual("Test",test.Name);
+          Assert.AreEqual(
+                  "a+3/20",
+                  test.linguisticMembershipFunctions["High"]
+                  );
+          Assert.AreEqual(
+                  "a*3+2+1",
+                  test.linguisticMembershipFunctions["Medium"]
+                  );
+          Assert.AreEqual(
+                  "32-70",
+                  test.linguisticMembershipFunctions["Low"]
+                  );
       }
       [Test]
-      public void testConstructFromMF()
+      public void testLoadRule()
+      {
+          Assert.IsTrue(
+                  test.Rule.Contains(
+                      "If Power High or Hunger Low Then Level Sleep"
+                      )
+                  );
+      }
+      [Test]
+      public void TestFuzzification()
       {
           test.Fuzzification(20);
           Assert.AreEqual(20.15,test.linguisticValue["High"]);
+      }
+      [Test]
+      public void testApplyRule()
+      {
       }
     }
     [TestFixture]
