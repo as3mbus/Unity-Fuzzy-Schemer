@@ -19,7 +19,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             new Dictionary<string, double>();
 
         private string membershipFunctionVersion;
-        public string MFVersion { get { return membershipFunctionVersion; } }
+        public string JsonVersion { get { return membershipFunctionVersion; } }
         public Dictionary<string,string> linguisticMembershipFunctions = 
             new Dictionary<string, string>();
 
@@ -37,7 +37,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             string type = MFJSO.GetField("Type").str;
             if ( !type.Equals( "Membership Function" ) ) return;
             this.membershipFunctionVersion = MFJSO.GetField("Version").str; 
-            switch (MFVersion)
+            switch (JsonVersion)
             {
                 case "0.1":
                     this.linguisticName = 
@@ -74,6 +74,10 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                 double fuzzyValue = Eval.Evaluate(expression);
                 linguisticValue.Add(MF.Key, fuzzyValue);
             }
+        }
+        public void RuleApplication()
+        {
+
         }
         
     }
