@@ -15,5 +15,17 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
          newString = newString.Replace("/", " div ").Replace("%", " mod ");
          return (double)nav.Evaluate("number(" + newString + ")");
       }
+      public static double ReplaceNEvaluate(
+              string expression, 
+              string replaceRegex, 
+              double ReplacedValue)
+      {
+            Regex pattern = new Regex(replaceRegex); 
+            string mathExpression = pattern.Replace(
+                            expression,
+                            ReplacedValue.ToString()
+                            );
+            return Eval.Evaluate(mathExpression);
+      }
     }
 }

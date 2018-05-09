@@ -7,63 +7,6 @@ using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
     [TestFixture]
-    public class TestLinguistics 
-    {
-        TextAsset MembershipFunctTextAsset;
-        LinguisticVariable testLinguisticVariable;
-        [SetUp]
-        public void setup()
-        {
-            TextAsset MembershipFunctTextAsset = 
-                Resources.Load("MembershipFunctions") as TextAsset;
-            testLinguisticVariable = new LinguisticVariable();
-            testLinguisticVariable.loadMembershipFunction(
-                    MembershipFunctTextAsset.text);
-        }
-        [Test]
-        public void testIsExist()
-        {
-            Assert.AreEqual(true,testLinguisticVariable!=null);
-        } 
-        [Test]
-        public void testLoadMembershipFunction()
-        {
-            Assert.AreEqual("0.1",testLinguisticVariable.JsonVersion);
-            Assert.AreEqual("SampleTest",testLinguisticVariable.Name);
-            Assert.AreEqual(
-                    "a+3/20",
-                    testLinguisticVariable.
-                    linguisticMembershipFunctions["High"]
-                    );
-            Assert.AreEqual(
-                    "a*3+2+1",
-                    testLinguisticVariable.
-                    linguisticMembershipFunctions["Medium"]
-                    );
-            Assert.AreEqual(
-                    "32-70",
-                    testLinguisticVariable.
-                    linguisticMembershipFunctions["Low"]
-                    );
-        }
-        [Test]
-        public void testLoadRule()
-        {
-            Assert.IsTrue(
-                    testLinguisticVariable.Rule.Contains(
-                        "If Power High or Hunger Low Then Level Sleep"
-                        )
-                    );
-        }
-        [Test]
-        public void TestFuzzification()
-        {
-            testLinguisticVariable.Fuzzification(20);
-            Assert.AreEqual(20.15,
-                    testLinguisticVariable.linguisticValue["High"]);
-        }
-    }
-    [TestFixture]
     public class TestMultipleLinguistics
     {
         List<LinguisticVariable> TestLinguisticsList;
@@ -95,11 +38,25 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     public class TestFunctional
     {
         [Test]
-        public void testCalculate()
+        public void testEvaluate()
         {
             double v = Eval.Evaluate("20+3/20");
             Assert.AreEqual(20.15,v);
         } 
+        [Test]
+        public void testReplaceAndEvaluate()
+        {
+            string testExpression = "a+3/20";
+            string testRegex = "[a]";
+            double testValue = 30d;
+            double expectedResult = 30.15d;
+            Assert.AreEqual(
+                    expectedResult,
+                    Eval.ReplaceNEvaluate(
+                        testExpression, testRegex, testValue)
+                    );
+
+        }
         [Test]
         public void testReadFile()
         {

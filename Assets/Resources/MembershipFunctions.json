@@ -19,7 +19,15 @@
     ],
     "LinguisticRule" : 
     [
-        "If Power High or Hunger Low Then Level Sleep",
-        "If Energy High and Range Low Then Level Run"
+        {
+            "Operator" : "MinMax",
+            "Implication" : "Mamdani",
+            "Rule" : "If Power High or Hunger Low Then Level Sleep"
+        },
+        {
+            "Operator" : "Probabilistic",
+            "Implication" : "Mamdani",
+            "Rule" : "If Energy High and Range Low Then Level Run"
+        }
     ]
 }
