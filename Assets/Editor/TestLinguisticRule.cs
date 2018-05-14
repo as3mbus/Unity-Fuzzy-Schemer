@@ -23,7 +23,14 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [SetUp]
         public void setup()
         {
-            int a;
+            TestJsonRule = 
+                @"
+                {
+                    ""Operator"" : """ + TestOperator.ToString() + @""",
+                    ""Implication"" : """ + TestImplication.ToString() + @""",
+                    ""Rule"" : """ + testActualRule + @"""
+                }
+                ";
         }
         [Test]
         public void testConstruct()
@@ -31,10 +38,19 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             testRule = new LinguisticRule(testActualRule);
             Assert.AreEqual(testRule.rule,testActualRule);
         }
-
-        public void test()
+        [Test]
+        public void testParseJson()
         {
-            Assert.IsTrue(true);
+            testRule = LinguisticRule.FromJson(TestJsonRule);
+            Assert.AreEqual(
+                    TestOperator.ToString(),
+                    testRule.fOperator.ToString());
+            Assert.AreEqual(
+                    TestImplication.ToString(),
+                    testRule.implicationM.ToString());
+            Assert.AreEqual(
+                    testActualRule,
+                    testRule.rule);
         }
     }
 }
