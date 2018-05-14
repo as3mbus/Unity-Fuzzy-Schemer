@@ -40,7 +40,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         {
             get {return actualRule;}
         }
-        public static LinguisticRule FromJson(string JsonData)
+        public static LinguisticRule fromJson(string JsonData)
         {
             JSONObject LRJSO = new JSONObject(JsonData);
             LinguisticRule Result = new LinguisticRule(

@@ -21,21 +21,40 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                   ""Name"" : """ + TestLinguisticName + @""",
                   ""MembershipFunction"" : """ + TestExpression + @"""
                 }
-            ";
-            TestMF = new MembershipFunction(TestJson);
+                ";
+            TestMF = new MembershipFunction(
+                    TestLinguisticName, 
+                    TestExpression);
+        }
+        [Test]
+        public void TestConstruct()
+        {
+            TestMF = new MembershipFunction(
+                    TestLinguisticName, 
+                    TestExpression);
+            Assert.AreEqual(
+                    TestLinguisticName, 
+                    TestMF.membershipValue.linguistic);
+            Assert.AreEqual(TestExpression, TestMF.expression);
         }
         [Test]
         public void TestJsonConstruct()
         {
-            Assert.AreEqual(TestLinguisticName, TestMF.membershipValue.linguistic);
+            TestMF = MembershipFunction.fromJson(TestJson);
+            Assert.AreEqual(
+                    TestLinguisticName, 
+                    TestMF.membershipValue.linguistic);
             Assert.AreEqual(TestExpression, TestMF.expression);
         }
         [Test]
         public void TestFuzzification()
         {
             TestMF.Fuzzification(TestCrispValue);
-            Assert.AreEqual(Eval.ReplaceNEvaluate(TestExpression, "[A-z]", TestCrispValue), TestMF.membershipValue.fuzzy); 
-
+            Assert.AreEqual(
+                    Eval.ReplaceNEvaluate(
+                        TestExpression, "[A-z]", 
+                        TestCrispValue),
+                    TestMF.membershipValue.fuzzy); 
         }
     }
 }

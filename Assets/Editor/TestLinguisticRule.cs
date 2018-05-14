@@ -41,7 +41,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [Test]
         public void testParseJson()
         {
-            testRule = LinguisticRule.FromJson(TestJsonRule);
+            testRule = LinguisticRule.fromJson(TestJsonRule);
             Assert.AreEqual(
                     TestOperator.ToString(),
                     testRule.fOperator.ToString());

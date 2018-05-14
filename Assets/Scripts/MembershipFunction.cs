@@ -6,9 +6,10 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
 {
     public class MembershipFunction
     {
-        public MembershipFunction(string JsonData)
+        public MembershipFunction(string linguisticsVal, string expression)
         {
-            this.parseMFJson(JsonData);
+            this.membershipValue = new MembershipValue(linguisticsVal);
+            this.membershipExpression = expression;
         }
         public MembershipValue membershipValue;
 
@@ -27,15 +28,13 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             this.membershipValue.fuzzy = fuzzyValue;
         }
 
-        public void parseMFJson(string JsonData)
+        public static MembershipFunction fromJson(string JsonData)
         {
             JSONObject MFJSO = new JSONObject(JsonData);
-            this.membershipValue =
-                new MembershipValue(
-                        MFJSO.GetField("Name").str
-                        );
-            this.membershipExpression = 
-                MFJSO.GetField("MembershipFunction").str;
+            MembershipFunction result = new MembershipFunction(
+                    MFJSO.GetField("Name").str,
+                    MFJSO.GetField("MembershipFunction").str);
+            return result;
         }
     }
 }
