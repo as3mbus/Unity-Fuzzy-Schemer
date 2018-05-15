@@ -1,3 +1,4 @@
+using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
 {
     public class MembershipValue
@@ -22,6 +23,19 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         {
             get {return fuzzyValue;}
             set {fuzzyValue = value;}
+        }
+        public JSONObject encodeCompleteJson()
+        {
+            JSONObject encoded = new JSONObject(JSONObject.Type.OBJECT);
+            encoded.AddField("Name", this.linguisticValue);
+            encoded.AddField("Value", Eval.double2Float(this.fuzzyValue));
+            return encoded;
+        }
+        public JSONObject encodeLinguisticJson()
+        {
+            JSONObject encoded = new JSONObject(JSONObject.Type.OBJECT);
+            encoded.AddField("Name", this.linguisticValue);
+            return encoded;
         }
     }
 }

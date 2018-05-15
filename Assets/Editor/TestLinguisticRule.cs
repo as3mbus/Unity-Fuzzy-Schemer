@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using NUnit.Framework;
 using as3mbus.OpenFuzzyScenario.Scripts.Objects;
@@ -43,14 +44,61 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             Assert.AreEqual(
-                    TestOperator.ToString(),
-                    testRule.fOperator.ToString());
+                    TestOperator,
+                    testRule.fOperator);
             Assert.AreEqual(
-                    TestImplication.ToString(),
-                    testRule.implicationM.ToString());
+                    TestImplication,
+                    testRule.implicationM);
             Assert.AreEqual(
                     testActualRule,
                     testRule.rule);
+        }
+        /*
+        [Test]
+        public void testCompleteEncode()
+        {
+            TestMF = new MembershipFunction(
+                    TestLinguisticName, TestExpression);
+            TestMF.Fuzzification(TestCrispValue);
+            Assert.AreEqual(
+                    TestLinguisticName,
+                    TestMF.encodeCompleteJson().GetField("Name").str);
+            Assert.AreEqual(
+                    TestExpression,
+                    TestMF.encodeCompleteJson().
+                        GetField("MembershipFunction").str);
+            Assert.AreEqual(
+                    Eval.ReplaceNEvaluate(
+                        TestExpression, "[A-z]", 
+                        TestCrispValue),
+                    TestMF.encodeCompleteJson().GetField("Fuzzy").f,
+                    0.01d);
+        }
+        */
+        [Test]
+        public void testLinguisticEncode()
+        {
+            testRule = LinguisticRule.fromJson(TestJsonRule);
+            Assert.AreEqual(
+                    TestImplication,
+                    Enum.Parse(
+                        typeof(Implication), 
+                        testRule.encodeLinguisticJson().
+                            GetField("Implication").str
+                            )
+                    );
+            Assert.AreEqual(
+                    TestOperator,
+                    Enum.Parse(
+                        typeof(FuzzyOperator), 
+                        testRule.encodeLinguisticJson().
+                            GetField("Operator").str
+                            )
+                    );
+            Assert.AreEqual(
+                    testActualRule,
+                    testRule.encodeLinguisticJson().GetField("Rule").str
+                    );
         }
     }
 }

@@ -53,5 +53,21 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                     LRJSO.GetField("Operator").str );
             return Result;
         }
+        /*
+        public JSONObject encodeCompleteJson()
+        {
+            JSONObject encoded = this.encodeLinguisticJson();
+            encoded.AddField("Rule", Eval.double2Float(this.fuzzyValue));
+            return encoded;
+        }
+        */
+        public JSONObject encodeLinguisticJson()
+        {
+            JSONObject encoded = new JSONObject(JSONObject.Type.OBJECT);
+            encoded.AddField("Operator", this.fOperator.ToString());
+            encoded.AddField("Implication", this.implicationM.ToString());
+            encoded.AddField("Rule", this.rule);
+            return encoded;
+        }
     }
 }

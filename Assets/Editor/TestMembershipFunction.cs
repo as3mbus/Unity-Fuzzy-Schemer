@@ -56,5 +56,38 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                         TestCrispValue),
                     TestMF.membershipValue.fuzzy); 
         }
+        [Test]
+        public void testCompleteEncode()
+        {
+            TestMF = new MembershipFunction(
+                    TestLinguisticName, TestExpression);
+            TestMF.Fuzzification(TestCrispValue);
+            Assert.AreEqual(
+                    TestLinguisticName,
+                    TestMF.encodeCompleteJson().GetField("Name").str);
+            Assert.AreEqual(
+                    TestExpression,
+                    TestMF.encodeCompleteJson().
+                        GetField("MembershipFunction").str);
+            Assert.AreEqual(
+                    Eval.ReplaceNEvaluate(
+                        TestExpression, "[A-z]", 
+                        TestCrispValue),
+                    TestMF.encodeCompleteJson().GetField("Fuzzy").f,
+                    0.01d);
+        }
+        [Test]
+        public void testLinguisticEncode()
+        {
+            TestMF = new MembershipFunction(
+                    TestLinguisticName, TestExpression);
+            Assert.AreEqual(
+                    TestLinguisticName,
+                    TestMF.encodeLinguisticJson().GetField("Name").str);
+            Assert.AreEqual(
+                    TestExpression,
+                    TestMF.encodeLinguisticJson().
+                        GetField("MembershipFunction").str);
+        }
     }
 }

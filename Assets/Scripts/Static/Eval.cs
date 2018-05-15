@@ -27,5 +27,17 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                             );
             return Eval.Evaluate(mathExpression);
       }
+      public static float double2Float(double input)
+      {
+          float result = (float) input;
+          if (float.IsPositiveInfinity(result))
+          {
+                  result = float.MaxValue;
+          } else if (float.IsNegativeInfinity(result))
+          {
+                  result = float.MinValue;
+          }
+          return result;
+      }
     }
 }

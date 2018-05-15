@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using as3mbus.OpenFuzzyScenario.Scripts.Objects;
+using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
     [TestFixture]
@@ -17,9 +18,32 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [Test]
         public void testConstructComplete()
         {
-            TestValue = new MembershipValue(TestLinguisticValue, TestFuzzyValue);
+            TestValue = new MembershipValue(
+                    TestLinguisticValue, TestFuzzyValue);
             Assert.AreEqual(TestLinguisticValue, TestValue.linguistic);
             Assert.AreEqual(TestFuzzyValue, TestValue.fuzzy);
+        }
+        [Test]
+        public void testCompleteEncode()
+        {
+            TestValue = new MembershipValue(
+                    TestLinguisticValue, TestFuzzyValue);
+            Assert.AreEqual(
+                    TestLinguisticValue,
+                    TestValue.encodeCompleteJson().GetField("Name").str);
+            Assert.AreEqual(
+                    TestFuzzyValue,
+                    TestValue.encodeCompleteJson().GetField("Value").f,
+                    0.01d);
+        }
+        [Test] 
+        public void testLinguisticEncode()
+        {
+            TestValue = new MembershipValue(
+                    TestLinguisticValue);
+            Assert.AreEqual(
+                    TestLinguisticValue,
+                    TestValue.encodeCompleteJson().GetField("Name").str);
         }
     }
 }

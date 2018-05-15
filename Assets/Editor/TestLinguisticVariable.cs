@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using as3mbus.OpenFuzzyScenario.Scripts.Objects;
@@ -6,11 +7,40 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     [TestFixture]
     public class TestLinguisticVariable 
     {
+        string TestJsonLingVar;
+        string testVersion = "0.1";
+        string testType = "MembershipFunction";
+        string testName = "TestName";
+        List<MembershipFunction> testMFs = new List<MembershipFunction>();
+        List<LinguisticRule> testLRs= new List<LinguisticRule>();
         TextAsset MembershipFunctTextAsset;
         LinguisticVariable testLinguisticVariable;
         [SetUp]
         public void setup()
         {
+            TestJsonLingVar = 
+@"
+{
+    ""Version"" : """+ testVersion + @""",
+    ""Type"" : """+ testType + @""",
+    ""LinguisticVariable"" : """+ testName + @""",
+    ""LinguisticValues"" : 
+    [
+         {
+              ""Name"" : """ + testName + @""",
+              ""MembershipFunction"" : """ + testName + @"""
+         }
+    ],
+    ""LinguisticRule"" : 
+    [
+         {
+            ""Operator"" : """ + testName.ToString() + @""",
+            ""Implication"" : """ + testName.ToString() + @""",
+            ""Rule"" : """ + testName + @"""
+         }
+    ]
+}
+";
             TextAsset MembershipFunctTextAsset = 
                 Resources.Load("MembershipFunctions") as TextAsset;
             testLinguisticVariable = new LinguisticVariable();

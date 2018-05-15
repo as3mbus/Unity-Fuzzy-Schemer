@@ -7,34 +7,6 @@ using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
     [TestFixture]
-    public class TestMultipleLinguistics
-    {
-        List<LinguisticVariable> TestLinguisticsList;
-        [SetUp]
-        public void setup()
-        {
-            TestLinguisticsList = new List<LinguisticVariable>();
-            foreach (TextAsset MFTextAsset 
-                    in Resources.LoadAll("MembershipFunctions"))
-            {
-                LinguisticVariable Filler = new LinguisticVariable();
-                Filler.loadMembershipFunction(MFTextAsset.text);
-                TestLinguisticsList.Add(Filler);
-            }
-        }
-        [Test]
-        public void testSetupTest()
-        {
-            Assert.NotNull(TestLinguisticsList[0]);
-            Assert.NotZero(TestLinguisticsList.Count);
-        }
-        [Test]
-        public void testApplyRule()
-        {
-
-        }
-    }
-    [TestFixture]
     public class TestFunctional
     {
         [Test]
@@ -78,12 +50,5 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     + parseJsonResult);
             Assert.AreEqual( typeof(string) , parseJsonResult.GetType() ); 
         }
-    }
-    [TestFixture]
-    public class TestInference
-    {
-        string testExpression="IF NOT FIGHT HIGH THEN GUARD LOW";
-
-
     }
 }
