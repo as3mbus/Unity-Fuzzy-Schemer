@@ -9,7 +9,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     {
         string TestJsonLingVar;
         string testVersion = "0.1";
-        string testType = "MembershipFunction";
+        string testType = "Linguistics";
         string testName = "TestName";
         List<MembershipFunction> testMFs = new List<MembershipFunction>();
         List<LinguisticRule> testLRs= new List<LinguisticRule>();
@@ -18,40 +18,53 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [SetUp]
         public void setup()
         {
+            TextAsset MembershipFunctTextAsset = 
+                Resources.Load("MembershipFunctions") as TextAsset;
+            testLinguisticVariable = new LinguisticVariable();
+            testMFs.Add(new MembershipFunction("Low","a+3"));
+            testLinguisticVariable.loadMembershipFunction(
+                    MembershipFunctTextAsset.text);
             TestJsonLingVar = 
 @"
 {
     ""Version"" : """+ testVersion + @""",
-    ""Type"" : """+ testType + @""",
     ""LinguisticVariable"" : """+ testName + @""",
+    ""Type"" : """+ testType + @""",
     ""LinguisticValues"" : 
     [
-         {
-              ""Name"" : """ + testName + @""",
-              ""MembershipFunction"" : """ + testName + @"""
-         }
+    ";
+            foreach (MembershipFunction testMF in testMFs)
+            {
+                TestJsonLingVar+= testMF.encodeLinguisticJson().Print(true);
+                if (!testMF.Equals(testMFs[testMFs.Count-1]))
+                    TestJsonLingVar+= ",";
+            }
+            TestJsonLingVar += 
+    @"
     ],
     ""LinguisticRule"" : 
-    [
-         {
-            ""Operator"" : """ + testName.ToString() + @""",
-            ""Implication"" : """ + testName.ToString() + @""",
-            ""Rule"" : """ + testName + @"""
-         }
-    ]
+    [";
+            foreach (LinguisticRule testLR in testLRs)
+            {
+                TestJsonLingVar+= testLR.encodeLinguisticJson().Print(true);
+                if (!testLR.Equals(testLRs[testLRs.Count-1]))
+                    TestJsonLingVar+= ",";
+            }
+            TestJsonLingVar +=
+    @"]
 }
 ";
-            TextAsset MembershipFunctTextAsset = 
-                Resources.Load("MembershipFunctions") as TextAsset;
-            testLinguisticVariable = new LinguisticVariable();
-            testLinguisticVariable.loadMembershipFunction(
-                    MembershipFunctTextAsset.text);
         }
         [Test]
-        public void testIsExist()
+        public void testSetUp()
         {
-            Assert.AreEqual(true,testLinguisticVariable!=null);
-        } 
+            Debug.Log(TestJsonLingVar);
+        }
+        [Test]
+        public void testConstructFromJson()
+        {
+            testLinguisticVariable = LinguisticVariable.fromJson(TestJsonLingVar);
+        }
         [Test]
         public void testLoadMembershipFunction()
         {

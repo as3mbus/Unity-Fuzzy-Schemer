@@ -1,7 +1,7 @@
 {
     "Version" : "0.1",
-    "Type" : "Membership Function",
     "LinguisticVariable" : "SampleTest",
+    "Type" : "Linguistics",
     "LinguisticValues" : 
     [
         {

@@ -29,6 +29,10 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             get { return linguisticRule; }
             set { linguisticRule = value; }
         }
+        public static LinguisticVariable fromJson(string jsonData)
+        {
+            return null;
+        }
 
         public void loadMembershipFunction(string JsonData)
         {

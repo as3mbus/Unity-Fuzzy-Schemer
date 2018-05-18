@@ -12,7 +12,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [Test]
         public void testEvaluate()
         {
-            double v = Eval.Evaluate("20+3/20");
+            double v = Eval.Evaluate("20+3/20^4");
             Assert.AreEqual(20.15,v);
         } 
         [Test]
