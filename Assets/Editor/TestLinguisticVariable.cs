@@ -22,8 +22,20 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                 Resources.Load("MembershipFunctions") as TextAsset;
             testLinguisticVariable = new LinguisticVariable();
             testMFs.Add(new MembershipFunction("Low","a+3"));
-            testLinguisticVariable.loadMembershipFunction(
-                    MembershipFunctTextAsset.text);
+            testMFs.Add(new MembershipFunction("Medium","a+10"));
+            testMFs.Add(new MembershipFunction("High","a+15"));
+            testLRs.Add(new LinguisticRule(
+                        "if Health High and Power High then stage HardFight",
+                        Implication.Gaines,
+                        FuzzyOperator.MinMax));
+            testLRs.Add(new LinguisticRule(
+                        "if Health Low and Power Medium then stage NormalFight",
+                        Implication.Godel,
+                        FuzzyOperator.MinMax));
+            testLRs.Add(new LinguisticRule(
+                        "if Health Medium and Power Low then stage EasyFight",
+                        Implication.Gaines,
+                        FuzzyOperator.MinMax));
             TestJsonLingVar = 
 @"
 {
@@ -63,44 +75,62 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [Test]
         public void testConstructFromJson()
         {
-            testLinguisticVariable = LinguisticVariable.fromJson(TestJsonLingVar);
-        }
-        [Test]
-        public void testLoadMembershipFunction()
-        {
-            Assert.AreEqual("0.1",testLinguisticVariable.JsonVersion);
-            Assert.AreEqual("SampleTest",testLinguisticVariable.Name);
+            testLinguisticVariable = 
+                LinguisticVariable.fromJson(TestJsonLingVar);
             Assert.AreEqual(
-                    "a+3/20",
-                    testLinguisticVariable.
-                    linguisticMembershipFunctions["High"]
+                    testVersion,
+                    testLinguisticVariable.JsonVersion);
+            Assert.AreEqual(testName,testLinguisticVariable.Name);
+            foreach (MembershipFunction testMF in testMFs)
+            {
+                Assert.IsTrue(
+                        testLinguisticVariable.membershipFunctions.Exists(
+                            mf=>mf.membershipValue.linguistic.Equals(
+                                testMF.membershipValue.linguistic
+                                )
+                            )
+                        );
+                            
+                Assert.AreEqual(
+                        testMF.expression,
+                        testLinguisticVariable.
+                        membershipFunctions.Find(
+                            mf => mf.membershipValue.linguistic.Equals(
+                                testMF.membershipValue.linguistic)
+                            ).expression
+                        );
+            }
+            foreach (LinguisticRule testLR in testLRs)
+            {
+                Assert.IsTrue(
+                        testLinguisticVariable.linguisticRules.Exists(
+                            lr=>lr.rule.Equals(
+                                testLR.rule
+                                )
+                            )
+                        );
+                LinguisticRule CorespLR = testLinguisticVariable.linguisticRules.Find(
+                    mf => mf.membershipValue.linguistic.Equals(
+                        testLR.membershipValue.linguistic)
                     );
-            Assert.AreEqual(
-                    "a*3+2+1",
-                    testLinguisticVariable.
-                    linguisticMembershipFunctions["Medium"]
-                    );
-            Assert.AreEqual(
-                    "32-70",
-                    testLinguisticVariable.
-                    linguisticMembershipFunctions["Low"]
-                    );
-        }
-        [Test]
-        public void testLoadRule()
-        {
-            Assert.IsTrue(
-                    testLinguisticVariable.Rule.Contains(
-                        "If Power High or Hunger Low Then Level Sleep"
-                        )
-                    );
+                Assert.AreEqual(testLR.rule, 
+                        CorespLR.rule);
+                Assert.AreEqual(testLR.implicationM, 
+                        CorespLR.implicationM);
+                Assert.AreEqual(testLR.fOperator, 
+                        CorespLR.fOperator);
+            }
         }
         [Test]
         public void TestFuzzification()
         {
             testLinguisticVariable.Fuzzification(20);
-            Assert.AreEqual(20.15,
-                    testLinguisticVariable.linguisticValue["High"]);
+            Assert.AreEqual(
+                    45,
+                    testLinguisticVariable.membershipFunctions.Find(
+                        mf => mf.membershipValue.linguistic.Equals("High"))
+                    .membershipValue.fuzzy
+                    );
         }
     }
 }

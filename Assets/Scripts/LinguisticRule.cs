@@ -24,6 +24,12 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             this.actualRule = rule;
             parseRule(rule);
         }
+        public LinguisticRule(string rule, Implication impl, FuzzyOperator opr)
+            :this (rule)
+        {
+            this.implicationMethod = impl;
+            this._operator = opr;
+        }
 
         public MembershipValue membershipValue;
         public FuzzyOperator fOperator

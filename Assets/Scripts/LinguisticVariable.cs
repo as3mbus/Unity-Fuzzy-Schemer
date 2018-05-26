@@ -7,12 +7,8 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
     {
         private string linguisticName;
         private string linguisticVariableVersion;
-        private List<string> linguisticRule = 
-            new List<string>();
 
         public string JsonVersion { get { return linguisticVariableVersion; } }
-        public Dictionary<string,string> linguisticMembershipFunctions = 
-            new Dictionary<string, string>();
 
         public string Name
         {
@@ -22,45 +18,39 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
 
         public List<MembershipFunction> membershipFunctions=
             new List<MembershipFunction>();
-        public Dictionary<string,double> linguisticValue =
-            new Dictionary<string, double>();
-        public List<string> Rule
-        {
-            get { return linguisticRule; }
-            set { linguisticRule = value; }
-        }
+        public List<LinguisticRule> linguisticRules = 
+            new List<LinguisticRule>();
         public static LinguisticVariable fromJson(string jsonData)
         {
-            return null;
-        }
-
-        public void loadMembershipFunction(string JsonData)
-        {
-            JSONObject MFJSO = new JSONObject(JsonData);
+            LinguisticVariable result = new LinguisticVariable();
+            JSONObject MFJSO = new JSONObject(jsonData);
             string type = MFJSO.GetField("Type").str;
-            if ( !type.Equals( "Membership Function" ) ) return;
-            this.linguisticVariableVersion = MFJSO.GetField("Version").str; 
-            switch (JsonVersion)
+            if ( !type.Equals( "Linguistics") && !type.Equals("Fuzzy") ) 
+                return null;
+            result.linguisticVariableVersion = MFJSO.GetField("Version").str; 
+            switch (result.JsonVersion)
             {
-                case "0.1":
-                    this.linguisticName = 
+                case "0.1" :
+                    result.linguisticName = 
                         MFJSO.GetField("LinguisticVariable").str; 
                     foreach (JSONObject MF in 
                             MFJSO.GetField("LinguisticValues").list)
                     {
-                        this.linguisticMembershipFunctions.Add(
-                                MF.GetField("Name").str,
-                                MF.GetField("MembershipFunction").str);
+                        result.membershipFunctions.Add(
+                                MembershipFunction.fromJson(MF.Print())
+                                );
                     }
                     foreach (JSONObject Rule in 
                             MFJSO.GetField("LinguisticRule").list)
                     {
-                        this.linguisticRule.Add(Rule.str);
+                        result.linguisticRules.Add(
+                                LinguisticRule.fromJson(Rule.Print()));
                     }
                     break;
                 default:
                     break;
             }
+            return result;
         }
         
         public void Fuzzification(int crispValue)
