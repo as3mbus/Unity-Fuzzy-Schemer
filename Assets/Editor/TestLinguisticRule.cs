@@ -40,6 +40,14 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Assert.AreEqual(testRule.rule,testActualRule);
         }
         [Test]
+        public void testConstructComplete()
+        {
+            testRule = new LinguisticRule(testActualRule, TestImplication, TestOperator);
+            Assert.AreEqual(testRule.rule,testActualRule);
+            Assert.AreEqual(testRule.fOperator, TestOperator);
+            Assert.AreEqual(testRule.implicationM, TestImplication);
+        }
+        [Test]
         public void testParseJson()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
