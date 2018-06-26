@@ -16,18 +16,5 @@
             "Name" : "Low",
             "MembershipFunction" : "32-70"
         }
-    ],
-    "LinguisticRule" : 
-    [
-        {
-            "Operator" : "MinMax",
-            "Implication" : "Mamdani",
-            "Rule" : "If Power High or Hunger Low Then Level Sleep"
-        },
-        {
-            "Operator" : "Probabilistic",
-            "Implication" : "Mamdani",
-            "Rule" : "If Energy High and Range Low Then Level Run"
-        }
     ]
 }

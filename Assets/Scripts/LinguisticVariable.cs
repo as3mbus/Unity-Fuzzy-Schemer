@@ -7,8 +7,10 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
     {
         private string linguisticName;
         private string linguisticVariableVersion;
+        private double crispVal;
 
         public string JsonVersion { get { return linguisticVariableVersion; } }
+        public double crisp { get { return crispVal; } }
 
         public string Name
         {
@@ -40,11 +42,14 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                                 MembershipFunction.fromJson(MF.Print())
                                 );
                     }
-                    foreach (JSONObject Rule in 
-                            MFJSO.GetField("LinguisticRule").list)
+                    if(MFJSO.HasField("LinguisticRule"))
                     {
-                        result.linguisticRules.Add(
-                                LinguisticRule.fromJson(Rule.Print()));
+                        foreach (JSONObject Rule in 
+                                MFJSO.GetField("LinguisticRule").list)
+                        {
+                            result.linguisticRules.Add(
+                                    LinguisticRule.fromJson(Rule.Print()));
+                        }
                     }
                     break;
                 default:
@@ -53,18 +58,22 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             return result;
         }
         
-        public void Fuzzification(int crispValue)
+        public void Fuzzification(double crispValue)
         {
+            crispVal = crispValue;
             foreach (MembershipFunction MF
                     in membershipFunctions)
             {
                 MF.Fuzzification(crispValue);
             }
         }
-        public void RuleApplication()
+        public void ApplyRule(List<LinguisticVariable> LingVars)
         {
-
+            foreach(LinguisticRule LR
+                    in linguisticRules)
+            {
+                LR.Apply(LingVars);
+            }
         }
-        
     }
 }

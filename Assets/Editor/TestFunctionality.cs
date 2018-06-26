@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using as3mbus.OpenFuzzyScenario.Scripts.Objects;
 using as3mbus.OpenFuzzyScenario.Scripts.Statics;
+using B83.ExpressionParser;
 
 namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
@@ -12,8 +13,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [Test]
         public void testEvaluate()
         {
-            double v = Eval.Evaluate("20+3/20^4");
-            Assert.AreEqual(20.15,v);
+            var parser = new ExpressionParser();
+            double v = parser.Evaluate("max(max(max(2,135),20),20)");
+            Assert.AreEqual(135,v);
         } 
         [Test]
         public void testReplaceAndEvaluate()

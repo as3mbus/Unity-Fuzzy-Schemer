@@ -1,7 +1,10 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
+using UnityEngine;
 using NUnit.Framework;
 using as3mbus.OpenFuzzyScenario.Scripts.Objects;
+using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 
 namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
@@ -9,41 +12,38 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     public class TestLinguisticRule
     {
         
-        FuzzyOperator TestOperator = FuzzyOperator.MinMax;
+        IFuzzyOperator TestOperator = FuzzyOperator.MinMax;
         Implication TestImplication = Implication.Mamdani;
-        string testActualRule =  "If Power High or Hunger Low Then Level Sleep";
-        string TestJsonRule = 
-            @"
-            {
-                ""Operator"" : ""MinMax"",
-                ""Implication"" : ""Mamdani"",
-                ""Rule"" : ""If Power High or Hunger Low Then Level Sleep""
-            }
-            ";
+        string testRuleValue = "Sleep";
+        string testActualRule =  "Power High or Hunger Low";
+        string TestJsonRule ; 
         LinguisticRule testRule;
         [SetUp]
         public void setup()
         {
             TestJsonRule = 
-                @"
-                {
-                    ""Operator"" : """ + TestOperator.ToString() + @""",
-                    ""Implication"" : """ + TestImplication.ToString() + @""",
-                    ""Rule"" : """ + testActualRule + @"""
-                }
-                ";
+@"
+{
+    ""Value"" : """ + testRuleValue  + @""",
+    ""Operator"" : """ + FuzzyOperator.nameOf(TestOperator)  + @""",
+    ""Implication"" : """ + TestImplication.ToString() + @""",
+    ""Rule"" : """ + testActualRule + @"""
+}
+";
         }
         [Test]
         public void testConstruct()
         {
-            testRule = new LinguisticRule(testActualRule);
-            Assert.AreEqual(testRule.rule,testActualRule);
+            testRule = new LinguisticRule(testRuleValue, testActualRule);
+            Assert.AreEqual(testRule.rule,
+                    testActualRule);
         }
         [Test]
         public void testConstructComplete()
         {
-            testRule = new LinguisticRule(testActualRule, TestImplication, TestOperator);
-            Assert.AreEqual(testRule.rule,testActualRule);
+            testRule = new LinguisticRule(testRuleValue, testActualRule, TestImplication, TestOperator);
+            Assert.AreEqual(testRule.rule,
+                    testActualRule);
             Assert.AreEqual(testRule.fOperator, TestOperator);
             Assert.AreEqual(testRule.implicationM, TestImplication);
         }
@@ -88,6 +88,10 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             Assert.AreEqual(
+                    testRuleValue,
+                    testRule.encodeLinguisticJson().GetField("Value").str
+                    );
+            Assert.AreEqual(
                     TestImplication,
                     Enum.Parse(
                         typeof(Implication), 
@@ -96,17 +100,32 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                             )
                     );
             Assert.AreEqual(
-                    TestOperator,
-                    Enum.Parse(
-                        typeof(FuzzyOperator), 
-                        testRule.encodeLinguisticJson().
-                            GetField("Operator").str
-                            )
+                    FuzzyOperator.nameOf(TestOperator),
+                    testRule.encodeLinguisticJson().
+                        GetField("Operator").str
                     );
             Assert.AreEqual(
                     testActualRule,
                     testRule.encodeLinguisticJson().GetField("Rule").str
                     );
+        }
+        [Test]
+        public void testNumericRule()
+        {
+            testRule = LinguisticRule.fromJson(TestJsonRule);
+            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
+            UnityEngine.Object[] jsonLing = 
+                Resources.LoadAll(
+                        "TestLinguistics",
+                        typeof(TextAsset)) ;
+            foreach(TextAsset asset in jsonLing)
+                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
+            foreach(LinguisticVariable LV in TestLingVars)
+            {
+                LV.Fuzzification(20.24);
+            }
+            Debug.Log(testRule.numericRule(TestLingVars));
+
         }
     }
 }

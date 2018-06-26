@@ -2,39 +2,67 @@ using System;
 
 namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
 {
-    public static class FuzzyOperator
+    public interface IFuzzyOperator 
     {
-        public static class MinMax //Zadeh Operators
+        double Intersection(double value1, double value2);
+        double Union(double value1, double value2);
+        double Complement(double value);
+    }
+    public class FuzzyOperator
+    {
+        class ProbabilisticOperator : IFuzzyOperator
         {
-            public static double Intersection(double value1, double value2)
+            public double Intersection(double value1, double value2)
             {
-                return Math.Min(value1,value2);
+                return value1*value2;
             }
-
-            public static double Union(double value1, double value2)
+            public double Union(double value1, double value2)
             {
-                return Math.Max(value1,value2);
+                return value1+value2-value1*value2;
             }
-            public static double Complement(double value)
+            public double Complement(double value)
             {
                 return 1-value;
             }
         }
-        public static class ProdProbor //Probabilistics Operators
-        {
-            public static double Intersection(double value1, double value2)
-            {
-                return value1*value2;
-            }
 
-            public static double Union(double value1, double value2)
+        class MinMaxOperator : IFuzzyOperator
+        {
+            public double Intersection(double value1, double value2)
             {
-                return value1+value2-value1*value2;
+                return Math.Min(value1,value2);
             }
-            public static double Complement(double value)
+            public double Union(double value1, double value2)
+            {
+                return Math.Max(value1,value2);
+            }
+            public double Complement(double value)
             {
                 return 1-value;
             }
+        }
+        public static IFuzzyOperator MinMax = new MinMaxOperator(); 
+        public static IFuzzyOperator Probabilistic = new ProbabilisticOperator(); 
+        public static IFuzzyOperator TryParse(string name)
+        {
+            switch (name.ToLower())
+            {
+                case "minmax":
+                    return MinMax;
+                case "probabilistic":
+                    return Probabilistic;
+                default :
+                    return null;
+            }
+        }
+        public static string nameOf(IFuzzyOperator Operator)
+        {
+            if(Operator.Equals(MinMax))
+                return "MinMax";
+            else if(Operator.Equals(Probabilistic))
+                return "Probabilistic";
+            else 
+                return null;
         }
     }
 }

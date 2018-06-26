@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using as3mbus.OpenFuzzyScenario.Scripts.Objects;
+using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
     [TestFixture]
@@ -25,15 +26,18 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             testMFs.Add(new MembershipFunction("Medium","a+10"));
             testMFs.Add(new MembershipFunction("High","a+15"));
             testLRs.Add(new LinguisticRule(
-                        "if Health High and Power High then stage HardFight",
+                        "HardFight",
+                        "Health High and Power High",
                         Implication.Gaines,
                         FuzzyOperator.MinMax));
             testLRs.Add(new LinguisticRule(
-                        "if Health Low and Power Medium then stage NormalFight",
+                        "NormalFight",
+                        "Health Low and Power Medium",
                         Implication.Godel,
-                        FuzzyOperator.MinMax));
+                        FuzzyOperator.Probabilistic));
             testLRs.Add(new LinguisticRule(
-                        "if Health Medium and Power Low then stage EasyFight",
+                        "EasyFight",
+                        "Health Medium and Power Low",
                         Implication.Gaines,
                         FuzzyOperator.MinMax));
             TestJsonLingVar = 
@@ -66,6 +70,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     @"]
 }
 ";
+Debug.Log(TestJsonLingVar);
         }
         [Test]
         public void testSetUp()
@@ -124,7 +129,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [Test]
         public void TestFuzzification()
         {
-            testLinguisticVariable.Fuzzification(20);
+            testLinguisticVariable = 
+                LinguisticVariable.fromJson(TestJsonLingVar);
+            testLinguisticVariable.Fuzzification(30);
             Assert.AreEqual(
                     45,
                     testLinguisticVariable.membershipFunctions.Find(

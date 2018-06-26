@@ -1,8 +1,10 @@
 using System;
+using System.Linq;
 using UnityEngine;
+using System.Collections.Generic;
+using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
 {
-    public enum FuzzyOperator : byte {MinMax, Probabilistic};
     public enum Implication :byte 
     {
         Mamdani, Larson, Lukasiewicz, StandardStrict, Godel, Gaines, 
@@ -11,28 +13,22 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
     public class LinguisticRule
     {
         private Implication implicationMethod = Implication.Mamdani;
-        private FuzzyOperator _operator = FuzzyOperator.MinMax;
+        private IFuzzyOperator _operator = FuzzyOperator.MinMax;
         private string actualRule;
-        private void parseRule(string rule)
+        public LinguisticRule(string rulval, string rule)
         {
-            string[] split = rule.Split(' ');
-            this.membershipValue = new MembershipValue(
-                    split[split.Length-1]);
-        }
-        public LinguisticRule(string rule)
-        {
+            this.membershipValue = new MembershipValue(rulval);
             this.actualRule = rule;
-            parseRule(rule);
         }
-        public LinguisticRule(string rule, Implication impl, FuzzyOperator opr)
-            :this (rule)
+        public LinguisticRule(string rulval, string rule, Implication impl, IFuzzyOperator opr)
+            :this (rulval, rule)
         {
             this.implicationMethod = impl;
             this._operator = opr;
         }
 
         public MembershipValue membershipValue;
-        public FuzzyOperator fOperator
+        public IFuzzyOperator fOperator
         {
             get {return _operator;}
             set {_operator = value;}
@@ -50,13 +46,15 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         {
             JSONObject LRJSO = new JSONObject(JsonData);
             LinguisticRule Result = new LinguisticRule(
+                    LRJSO.GetField("Value").str,
                     LRJSO.GetField("Rule").str);
-            Result.implicationMethod = (Implication) Enum.Parse(
+            Result.implicationMethod = 
+                (Implication) Enum.Parse(
                     typeof( Implication ),
                     LRJSO.GetField("Implication").str );
-            Result._operator = (FuzzyOperator) Enum.Parse(
-                    typeof( FuzzyOperator),
-                    LRJSO.GetField("Operator").str );
+            Result._operator = 
+                FuzzyOperator.TryParse(
+                        LRJSO.GetField("Operator").str);
             return Result;
         }
         /*
@@ -70,10 +68,92 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         public JSONObject encodeLinguisticJson()
         {
             JSONObject encoded = new JSONObject(JSONObject.Type.OBJECT);
-            encoded.AddField("Operator", this.fOperator.ToString());
+            encoded.AddField("Value", this.membershipValue.linguistic);
+            encoded.AddField("Operator", FuzzyOperator.nameOf(this.fOperator));
             encoded.AddField("Implication", this.implicationM.ToString());
             encoded.AddField("Rule", this.rule);
             return encoded;
+        }
+        public string numericRule(List<LinguisticVariable> LingVars)
+        {
+            string[] splitRule = this.actualRule.Split(' ');
+            string numericRule = "";
+            LinguisticVariable foundVar = null;
+            foreach(string word in splitRule)
+            {
+                if(foundVar==null)
+                {
+                    if(LingVars.Exists(v => v.Name.Equals(word)))
+                        foundVar = LingVars.Find(v => v.Name.Equals(word));
+                    else 
+                        numericRule += word + " ";
+                }
+                else 
+                {
+                    if(foundVar.membershipFunctions.Exists(
+                                f => f.membershipValue.
+                               linguistic.Equals(word)))
+                    {
+                        numericRule += 
+                            foundVar.membershipFunctions.Find(
+                                f => f.membershipValue.
+                                linguistic.Equals(word))
+                            .membershipValue.fuzzy + " ";
+                        foundVar = null;
+                    }
+                    else 
+                    {
+                        numericRule += word + " ";
+                        foundVar = null;
+                    }
+                }
+            }
+            return numericRule;
+        }
+        public string ApplyComplement(string numericRule)
+        {
+            string[] splitRule =  numericRule.Split(' ');
+            string result = "";
+            bool foundNot = false;
+            double numeric ;
+            foreach(string word in splitRule)
+            {
+                if(!foundNot)
+                {
+                    if(word.ToLower().Equals("not"))
+                        foundNot = true;
+                    else 
+                        numericRule += word + " ";
+                }
+                else 
+                {
+                    if(word.Any(c => char.IsDigit(c)))
+                    {
+                        Double.TryParse(word, out numeric);
+                        result += 
+                           this.fOperator.Complement(numeric) 
+                             + " ";
+                    }
+                    else 
+                    {
+                        foundNot = false;
+                        result += word + " ";
+                    }
+                }
+            }
+            return result;
+        }
+        public void Apply(List<LinguisticVariable> LingVars)
+        {
+            string[] splitRule = this.actualRule.Split(' ');
+            string numericRule;
+            foreach(string word in splitRule)
+            {
+                if(LingVars.Exists(v => v.Name.Equals(word)))
+                {
+                }
+                    
+            }
         }
     }
 }
