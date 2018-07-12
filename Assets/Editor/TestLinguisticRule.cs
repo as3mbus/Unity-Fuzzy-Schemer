@@ -15,7 +15,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         IFuzzyOperator TestOperator = FuzzyOperator.MinMax;
         Implication TestImplication = Implication.Mamdani;
         string testRuleValue = "Sleep";
-        string testActualRule =  "Power High or Hunger Low";
+        string testActualRule =  "Power High not or Hunger Low";
         string TestJsonRule ; 
         LinguisticRule testRule;
         [SetUp]
@@ -125,6 +125,24 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                 LV.Fuzzification(20.24);
             }
             Debug.Log(testRule.numericRule(TestLingVars));
+
+        }
+        [Test]
+        public void testComplement()
+        {
+            testRule = LinguisticRule.fromJson(TestJsonRule);
+            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
+            UnityEngine.Object[] jsonLing = 
+                Resources.LoadAll(
+                        "TestLinguistics",
+                        typeof(TextAsset)) ;
+            foreach(TextAsset asset in jsonLing)
+                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
+            foreach(LinguisticVariable LV in TestLingVars)
+            {
+                LV.Fuzzification(20.24);
+            }
+            Debug.Log(testRule.ApplyComplement(testRule.numericRule(TestLingVars)));
 
         }
     }

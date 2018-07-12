@@ -108,7 +108,34 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                     }
                 }
             }
-            return numericRule;
+            return numericRule.Trim();
+        }
+        public void calculate(string numericRule)
+        {
+            string[] splitRule =  numericRule.Split(' ');
+            int index =0;
+            if(Array.IndexOf(splitRule, "(")!=-1 )
+            {}
+            /*bracket
+                and
+                or
+             */   
+        }
+
+        public void bracket(string[] numerics)
+        {
+            int openBracket=1;
+            int i=0;
+            while  (openBracket!=0)
+            {
+                if (i>=numerics.Length)
+                    break;
+                if (numerics[i].Equals("("))
+                    openBracket++;
+                if (numerics[i].Equals(")"))
+                    openBracket--;
+                i++;
+            }
         }
         public string ApplyComplement(string numericRule)
         {
@@ -118,12 +145,13 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             double numeric ;
             foreach(string word in splitRule)
             {
+                Debug.Log(word);
                 if(!foundNot)
                 {
                     if(word.ToLower().Equals("not"))
                         foundNot = true;
                     else 
-                        numericRule += word + " ";
+                        result += word + " ";
                 }
                 else 
                 {
@@ -133,15 +161,16 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                         result += 
                            this.fOperator.Complement(numeric) 
                              + " ";
+                        foundNot = false;
                     }
                     else 
                     {
                         foundNot = false;
-                        result += word + " ";
+                        result += "not " +  word + " ";
                     }
                 }
             }
-            return result;
+            return result.Trim();
         }
         public void Apply(List<LinguisticVariable> LingVars)
         {

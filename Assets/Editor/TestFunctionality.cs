@@ -18,6 +18,18 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Assert.AreEqual(135,v);
         } 
         [Test]
+        public void testCustomFunction()
+        {
+            var parser = new ExpressionParser();
+            parser.AddFunc("and" , (p) =>
+                    {
+                    return FuzzyOperator.MinMax.Union(p[0],p[1]);
+                    }
+                    );
+            double v = parser.Evaluate("and(30,20)");
+            Debug.Log(v);
+        } 
+        [Test]
         public void testReplaceAndEvaluate()
         {
             string testExpression = "a+3/20";
