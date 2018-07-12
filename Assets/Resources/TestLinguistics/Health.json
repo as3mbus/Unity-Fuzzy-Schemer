@@ -1,0 +1,20 @@
+{
+    "Version" : "0.1",
+    "Type" : "Linguistics",
+    "LinguisticVariable" : "Health",
+    "LinguisticValues" : 
+    [
+        {
+            "Name" : "High",
+            "MembershipFunction" : "30-a/20"
+        },
+        {
+            "Name" : "Medium",
+            "MembershipFunction" : "a*3+2+1"
+        },
+        {
+            "Name" : "Low",
+            "MembershipFunction" : "32-70"
+        }
+    ]
+}

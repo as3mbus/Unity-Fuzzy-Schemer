@@ -1,0 +1,20 @@
+{
+    "Version" : "0.1",
+    "Type" : "Linguistics",
+    "LinguisticVariable" : "Hunger",
+    "LinguisticValues" : 
+    [
+        {
+            "Name" : "High",
+            "MembershipFunction" : "12/a*30"
+        },
+        {
+            "Name" : "Medium",
+            "MembershipFunction" : "132+a/312"
+        },
+        {
+            "Name" : "Low",
+            "MembershipFunction" : "212+3"
+        }
+    ]
+}

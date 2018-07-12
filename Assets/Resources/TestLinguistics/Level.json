@@ -1,0 +1,31 @@
+{
+    "Version" : "0.1",
+    "Type" : "Linguistics",
+    "LinguisticVariable" : "Level",
+    "LinguisticValues" : 
+    [
+        {
+            "Name" : "Sleep",
+            "MembershipFunction" : "412+a"
+        },
+        {
+            "Name" : "Run",
+            "MembershipFunction" : "123+123-a"
+        }
+    ],
+    "LinguisticRule" : 
+    [
+        {
+            "Value" : "Sleep",
+            "Operator" : "MinMax",
+            "Implication" : "Mamdani",
+            "Rule" : "Power High or Hunger Low"
+        },
+        {
+            "Value" : "Run",
+            "Operator" : "Probabilistic",
+            "Implication" : "Mamdani",
+            "Rule" : "Energy High and Range Low"
+        }
+    ]
+}

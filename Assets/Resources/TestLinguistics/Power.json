@@ -1,0 +1,20 @@
+{
+    "Version" : "0.1",
+    "Type" : "Linguistics",
+    "LinguisticVariable" : "Power",
+    "LinguisticValues" : 
+    [
+        {
+            "Name" : "High",
+            "MembershipFunction" : "100+3"
+        },
+        {
+            "Name" : "Medium",
+            "MembershipFunction" : "257+a-300/3"
+        },
+        {
+            "Name" : "Low",
+            "MembershipFunction" : "135*a-27"
+        }
+    ]
+}

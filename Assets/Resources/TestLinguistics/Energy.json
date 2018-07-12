@@ -1,0 +1,20 @@
+{
+    "Version" : "0.1",
+    "Type" : "Linguistics",
+    "LinguisticVariable" : "Energy",
+    "LinguisticValues" : 
+    [
+        {
+            "Name" : "High",
+            "MembershipFunction" : "92+a-123"
+        },
+        {
+            "Name" : "Medium",
+            "MembershipFunction" : "32/123^2"
+        },
+        {
+            "Name" : "Low",
+            "MembershipFunction" : "231*a/12.21"
+        }
+    ]
+}
