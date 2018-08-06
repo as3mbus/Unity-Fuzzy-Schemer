@@ -124,7 +124,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             {
                 LV.Fuzzification(20.24);
             }
-            Debug.Log(testRule.numericRule(TestLingVars));
+            Debug.Log("[Numeric Rule Result] = " + testRule.numericRule(TestLingVars));
 
         }
         [Test]
@@ -142,8 +142,11 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             {
                 LV.Fuzzification(20.24);
             }
-            Debug.Log(testRule.ApplyComplement(testRule.numericRule(TestLingVars)));
-
+            Debug.Log("[Apply Complement Result] = " 
+                    + testRule.ApplyComplement(
+                        testRule.numericRule(TestLingVars)
+                        )
+                    );
         }
     }
 }

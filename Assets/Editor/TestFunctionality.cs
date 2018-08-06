@@ -26,8 +26,6 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     return FuzzyOperator.MinMax.Union(p[0],p[1]);
                     }
                     );
-            double v = parser.Evaluate("and(30,20)");
-            Debug.Log(v);
         } 
         [Test]
         public void testReplaceAndEvaluate()

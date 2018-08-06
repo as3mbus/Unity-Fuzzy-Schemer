@@ -1,6 +1,5 @@
 using System;
 using System.Linq;
-using UnityEngine;
 using System.Collections.Generic;
 using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
@@ -145,7 +144,6 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             double numeric ;
             foreach(string word in splitRule)
             {
-                Debug.Log(word);
                 if(!foundNot)
                 {
                     if(word.ToLower().Equals("not"))

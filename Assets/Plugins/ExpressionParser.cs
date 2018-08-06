@@ -22,7 +22,6 @@
  * * * * * * * * * * * * * */
 using System.Linq;
 using System.Collections.Generic;
-using UnityEngine; 
  
 namespace B83.ExpressionParser
 {
@@ -387,16 +386,13 @@ namespace B83.ExpressionParser
         {
             aExpression = aExpression.Trim();
             int index = aExpression.IndexOf('(');
-            Debug.Log("Post trim : " + aExpression);
             while (index >= 0)
             {
                 SubstitudeBracket(ref aExpression, index);
                 index = aExpression.IndexOf('(');
             }
-            Debug.Log("post subbstitude bracket : " + aExpression);
             if (aExpression.Contains(','))
             {
-                Debug.Log("inside , conditions");
                 string[] parts = aExpression.Split(',');
                 List<IValue> exp = new List<IValue>(parts.Length);
                 for (int i = 0; i < parts.Length; i++)
@@ -552,7 +548,6 @@ namespace B83.ExpressionParser
             val.ExpressionTree = Parse(aExpression);
             m_Context = null;
             m_BracketHeap.Clear();
-            Debug.Log(val.Value);
             return val;
         }
  

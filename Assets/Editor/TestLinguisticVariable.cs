@@ -70,12 +70,12 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     @"]
 }
 ";
-Debug.Log(TestJsonLingVar);
         }
         [Test]
         public void testSetUp()
         {
-            Debug.Log(TestJsonLingVar);
+            Debug.Log("[TEST JSON LINGUISTIC VARIABLE]\n"
+                    + TestJsonLingVar);
         }
         [Test]
         public void testConstructFromJson()
