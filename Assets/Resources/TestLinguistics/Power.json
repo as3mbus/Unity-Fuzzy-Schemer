@@ -6,7 +6,7 @@
     [
         {
             "Name" : "High",
-            "MembershipFunction" : "100+3"
+            "MembershipFunction" : "100/a+3"
         },
         {
             "Name" : "Medium",

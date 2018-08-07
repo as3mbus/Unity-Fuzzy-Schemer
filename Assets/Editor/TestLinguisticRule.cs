@@ -12,10 +12,10 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     public class TestLinguisticRule
     {
         
-        IFuzzyOperator TestOperator = FuzzyOperator.MinMax;
+        IFuzzyOperator TestOperator = FuzzyOperator.Probabilistic;
         Implication TestImplication = Implication.Mamdani;
         string testRuleValue = "Sleep";
-        string testActualRule =  "Power High not or Hunger Low";
+        string testActualRule =  "not Power High or Hunger Low";
         string TestJsonRule ; 
         LinguisticRule testRule;
         [SetUp]
@@ -32,14 +32,14 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
 ";
         }
         [Test]
-        public void testConstruct()
+        public void Construct()
         {
             testRule = new LinguisticRule(testRuleValue, testActualRule);
             Assert.AreEqual(testRule.rule,
                     testActualRule);
         }
         [Test]
-        public void testConstructComplete()
+        public void ConstructComplete()
         {
             testRule = new LinguisticRule(testRuleValue, testActualRule, TestImplication, TestOperator);
             Assert.AreEqual(testRule.rule,
@@ -48,7 +48,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Assert.AreEqual(testRule.implicationM, TestImplication);
         }
         [Test]
-        public void testParseJson()
+        public void ParseJson()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             Assert.AreEqual(
@@ -63,7 +63,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         }
         /*
         [Test]
-        public void testCompleteEncode()
+        public void CompleteEncode()
         {
             TestMF = new MembershipFunction(
                     TestLinguisticName, TestExpression);
@@ -84,7 +84,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         }
         */
         [Test]
-        public void testLinguisticEncode()
+        public void LinguisticEncode()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             Assert.AreEqual(
@@ -110,7 +110,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     );
         }
         [Test]
-        public void testNumericRule()
+        public void NumericRule()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
@@ -125,10 +125,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                 LV.Fuzzification(20.24);
             }
             Debug.Log("[Numeric Rule Result] = " + testRule.numericRule(TestLingVars));
-
         }
         [Test]
-        public void testComplement()
+        public void Apply()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
@@ -140,13 +139,10 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                 TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
             foreach(LinguisticVariable LV in TestLingVars)
             {
-                LV.Fuzzification(20.24);
+                LV.Fuzzification(35.24);
             }
-            Debug.Log("[Apply Complement Result] = " 
-                    + testRule.ApplyComplement(
-                        testRule.numericRule(TestLingVars)
-                        )
-                    );
+            testRule.Apply(TestLingVars);
+            Debug.Log("[applied rule  result] : " + testRule.membershipValue.fuzzy);
         }
     }
 }

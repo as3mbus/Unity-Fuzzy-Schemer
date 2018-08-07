@@ -75,5 +75,8 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                 LR.Apply(LingVars);
             }
         }
+        public void Implication()
+        {
+        }
     }
 }

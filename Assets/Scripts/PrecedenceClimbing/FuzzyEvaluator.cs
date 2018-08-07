@@ -17,17 +17,23 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.PrecedenceClimbing
     }
     public static class FuzzyEvaluator
     {
+        static readonly Dictionary<string, OpInfo> OpInfo_Map
+            = new Dictionary<string, OpInfo>
+            {
+                { "and", new OpInfo(1,"LEFT")  },
+                { "or", new OpInfo(2,"LEFT")  }
+            };
         public static double computeAtom(
                 Tokenizer tokenized, 
                 IFuzzyOperator fuzzyOpr)
         {
             string tok = tokenized.CurrentToken;
-            Debug.Log(" Atom : " +tok);
+            //Debug.Log(" Atom : " +tok);
             if (Tokenizer.identifyToken(tok).Equals(tokenType.leftParen))
             {
                 tokenized.nextToken();
-                double val = computeExpr(tokenized,1, fuzzyOpr);
-                Debug.Log("right paren = " + tokenized.CurrentToken);
+                double val = computeExpr(tokenized,1, fuzzyOpr, false);
+                //Debug.Log("right paren = " + tokenized.CurrentToken);
                 if (!tokenized.CurrentType.Equals(tokenType.rightParen))
                     Debug.LogError("unmatched parentheses / bracket");
                 tokenized.nextToken();
@@ -40,8 +46,17 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.PrecedenceClimbing
             }
             else if (Tokenizer.identifyToken(tok).Equals(tokenType.operato))
             {
-                Debug.LogError("unexpected Operator when number is expected");
-                return -1;
+                if (tok.Equals("not"))
+                {
+                    tokenized.nextToken();
+                    double val = computeExpr(tokenized,1, fuzzyOpr, true);
+                    return fuzzyOpr.Complement(val);
+                }
+                else
+                {
+                    Debug.LogError("unexpected Operator when number is expected");
+                    return -1;
+                }
             }
             else
             {
@@ -51,20 +66,15 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.PrecedenceClimbing
                 return val;
             }
         }
-        static readonly Dictionary<string, OpInfo> OpInfo_Map
-            = new Dictionary<string, OpInfo>
-            {
-                { "and", new OpInfo(1,"LEFT")  },
-                { "or", new OpInfo(2,"LEFT")  }
-            };
         public static double computeExpr(
                 Tokenizer tokenized, 
                 int minPrec, 
-                IFuzzyOperator fuzzyOpr)
+                IFuzzyOperator fuzzyOpr,
+                bool withNot)
         {
             double atom_lhs = computeAtom(tokenized, fuzzyOpr);
             int n=1;
-            while (true)
+            while (true && !withNot)
             {
                 string cur = tokenized.CurrentToken;
                 tokenType curType;
@@ -77,11 +87,13 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.PrecedenceClimbing
                     curprec = OpInfo_Map[cur].prec;
                 else 
                     curprec = -1;
+                /*
                 Debug.Log(" loop No. " + n+ "\n"+
                         "current expr : " + cur + "\n" +
                         "current type: " + curType + "\n" +
                         "current prec: " + curprec + "\n" 
                         );
+                */
                 if (    
                     !curType.Equals(tokenType.operato)
                     || curprec < minPrec 
@@ -104,7 +116,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.PrecedenceClimbing
                 // Consume the current token and prepare the next one for the
                 // recursive call
                 tokenized.nextToken();
-                double atom_rhs = computeExpr(tokenized, next_min_prec, fuzzyOpr);
+                double atom_rhs = computeExpr(tokenized, next_min_prec, fuzzyOpr, false);
 
                 // Update lhs with the new value
                 atom_lhs = computeOpr(op, atom_lhs, atom_rhs, fuzzyOpr);
@@ -121,11 +133,11 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.PrecedenceClimbing
             switch (oper)
             {
                 case "and" :
-                    Debug.Log("[calc And] " + lhs +" and " + rhs);
+                    //Debug.Log("[calc And] " + lhs +" and " + rhs);
                     return fuzzyOpr.Union(lhs,rhs);
                     break;
                 case "or" :
-                    Debug.Log("[calc or] " + lhs +" and " + rhs);
+                    //Debug.Log("[calc or] " + lhs +" and " + rhs);
                     return fuzzyOpr.Intersection(lhs,rhs);
                     break;
                 default:

@@ -14,7 +14,7 @@
         },
         {
             "Name" : "Low",
-            "MembershipFunction" : "212+3"
+            "MembershipFunction" : "a-212+3"
         }
     ]
 }

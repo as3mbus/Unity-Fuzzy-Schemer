@@ -46,7 +46,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         {
             TextAsset asset = Resources.Load("MembershipFunctions") 
                 as TextAsset;
-            Debug.Log("====== Read Result from Resource file Text =======\n"
+            Debug.Log("[Read File Result from Resource text file]\n"
                     + asset.text);
             Assert.AreEqual(typeof(string),asset.text.GetType());
         }
@@ -58,7 +58,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             string jsonString = asset.text;
             JSONObject j = new JSONObject(jsonString);
             string parseJsonResult = j.GetField("Version").str; 
-            Debug.Log( "===== Parse result of Json String =====\n"
+            Debug.Log( "[Json Parsing Result for Key \"Version\"]\n"
                     + parseJsonResult);
             Assert.AreEqual( typeof(string) , parseJsonResult.GetType() ); 
         }

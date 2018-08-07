@@ -12,8 +12,8 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         string testVersion = "0.1";
         string testType = "Linguistics";
         string testName = "TestName";
-        List<MembershipFunction> testMFs = new List<MembershipFunction>();
-        List<LinguisticRule> testLRs= new List<LinguisticRule>();
+        List<MembershipFunction> testMFs;
+        List<LinguisticRule> testLRs;
         TextAsset MembershipFunctTextAsset;
         LinguisticVariable testLinguisticVariable;
         [SetUp]
@@ -22,6 +22,8 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             TextAsset MembershipFunctTextAsset = 
                 Resources.Load("MembershipFunctions") as TextAsset;
             testLinguisticVariable = new LinguisticVariable();
+            testMFs = new List<MembershipFunction>();
+            testLRs= new List<LinguisticRule>();
             testMFs.Add(new MembershipFunction("Low","a+3"));
             testMFs.Add(new MembershipFunction("Medium","a+10"));
             testMFs.Add(new MembershipFunction("High","a+15"));
@@ -72,13 +74,13 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
 ";
         }
         [Test]
-        public void testSetUp()
+        public void SetUp()
         {
             Debug.Log("[TEST JSON LINGUISTIC VARIABLE]\n"
                     + TestJsonLingVar);
         }
         [Test]
-        public void testConstructFromJson()
+        public void ConstructFromJson()
         {
             testLinguisticVariable = 
                 LinguisticVariable.fromJson(TestJsonLingVar);
@@ -127,7 +129,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             }
         }
         [Test]
-        public void TestFuzzification()
+        public void Fuzzification()
         {
             testLinguisticVariable = 
                 LinguisticVariable.fromJson(TestJsonLingVar);
@@ -138,6 +140,27 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                         mf => mf.membershipValue.linguistic.Equals("High"))
                     .membershipValue.fuzzy
                     );
+        }
+        [Test]
+        public void RuleApplication()
+        {
+            testLinguisticVariable = 
+                LinguisticVariable.fromJson(TestJsonLingVar);
+            testLinguisticVariable.Fuzzification(30);
+            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
+            UnityEngine.Object[] jsonLing = 
+                Resources.LoadAll(
+                        "TestLinguistics",
+                        typeof(TextAsset)) ;
+            foreach(TextAsset asset in jsonLing)
+                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
+            foreach(LinguisticVariable LV in TestLingVars)
+                LV.Fuzzification(35.24);
+            testLinguisticVariable.ApplyRule(TestLingVars);
+            foreach (LinguisticRule rule in testLinguisticVariable.linguisticRules)
+                Debug.Log(
+                        "[Lingusitic] : " + rule.membershipValue.linguistic + "\n"
+                        + "[Fuzzy] : " + rule.membershipValue.fuzzy );
         }
     }
 }

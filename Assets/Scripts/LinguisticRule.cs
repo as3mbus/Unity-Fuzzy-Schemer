@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 using as3mbus.OpenFuzzyScenario.Scripts.Statics;
+using as3mbus.OpenFuzzyScenario.Scripts.PrecedenceClimbing;
 namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
 {
     public enum Implication :byte 
@@ -109,78 +110,12 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             }
             return numericRule.Trim();
         }
-        public void calculate(string numericRule)
-        {
-            string[] splitRule =  numericRule.Split(' ');
-            int index =0;
-            if(Array.IndexOf(splitRule, "(")!=-1 )
-            {}
-            /*bracket
-                and
-                or
-             */   
-        }
 
-        public void bracket(string[] numerics)
-        {
-            int openBracket=1;
-            int i=0;
-            while  (openBracket!=0)
-            {
-                if (i>=numerics.Length)
-                    break;
-                if (numerics[i].Equals("("))
-                    openBracket++;
-                if (numerics[i].Equals(")"))
-                    openBracket--;
-                i++;
-            }
-        }
-        public string ApplyComplement(string numericRule)
-        {
-            string[] splitRule =  numericRule.Split(' ');
-            string result = "";
-            bool foundNot = false;
-            double numeric ;
-            foreach(string word in splitRule)
-            {
-                if(!foundNot)
-                {
-                    if(word.ToLower().Equals("not"))
-                        foundNot = true;
-                    else 
-                        result += word + " ";
-                }
-                else 
-                {
-                    if(word.Any(c => char.IsDigit(c)))
-                    {
-                        Double.TryParse(word, out numeric);
-                        result += 
-                           this.fOperator.Complement(numeric) 
-                             + " ";
-                        foundNot = false;
-                    }
-                    else 
-                    {
-                        foundNot = false;
-                        result += "not " +  word + " ";
-                    }
-                }
-            }
-            return result.Trim();
-        }
         public void Apply(List<LinguisticVariable> LingVars)
         {
-            string[] splitRule = this.actualRule.Split(' ');
-            string numericRule;
-            foreach(string word in splitRule)
-            {
-                if(LingVars.Exists(v => v.Name.Equals(word)))
-                {
-                }
-                    
-            }
+            string numericRule = this.numericRule(LingVars);
+            Tokenizer ruleTokens = Tokenizer.tokenize(numericRule);
+            this.membershipValue.fuzzy = FuzzyEvaluator.computeExpr(ruleTokens, 1, this.fOperator, false);
         }
     }
 }

@@ -1,3 +1,4 @@
+using UnityEngine;
 using NUnit.Framework;
 using as3mbus.OpenFuzzyScenario.Scripts.PrecedenceClimbing;
 using as3mbus.OpenFuzzyScenario.Scripts.Statics;
@@ -40,16 +41,17 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test.ClimbingPrecedence
         [Test]
         public void computeAtom()
         {
-            string testString = "23.5 and";
+            string testString = "23.5";
             Tokenizer tokened = Tokenizer.tokenize(testString);
             Assert.AreEqual(23.5, FuzzyEvaluator.computeAtom(tokened, FuzzyOperator.MinMax));
         }
         [Test]
         public void computeExpr()
         {
-            string testString = "23.5 or ( 3.5 and 0.004 ) and ( 32 or ( 0.3 and 0.012 ) )";
+            string testString = "not 23.5 or ( 3.5 and 0.004 ) and ( 32 or ( 0.3 and 0.012 ) )";
             Tokenizer tokened = Tokenizer.tokenize(testString);
-            Assert.AreEqual(23.5, FuzzyEvaluator.computeExpr(tokened, 1, FuzzyOperator.Probabilistic));
+            double result = FuzzyEvaluator.computeExpr(tokened, 1, FuzzyOperator.Probabilistic, false);
+            Debug.Log("[Calculation Result] : " + result);
         }
     }
 }
