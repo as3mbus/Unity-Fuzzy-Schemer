@@ -13,7 +13,10 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     {
         
         IFuzzyOperator TestOperator = FuzzyOperator.Probabilistic;
-        IFuzzyImplication TestImplication = FuzzyImplication.Mamdani;
+        IFuzzyImplication TestImplication = FuzzyImplication.Gaines;
+        double fuzzificationTestValue = 35.24;
+        double testNVal = 12.1;
+        string testMFExpr = "23+2/x";
         string testRuleValue = "Sleep";
         string testActualRule =  "not Power High or Hunger Low";
         string TestJsonRule ; 
@@ -137,10 +140,29 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                 TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
             foreach(LinguisticVariable LV in TestLingVars)
             {
-                LV.Fuzzification(35.24);
+                LV.Fuzzification(fuzzificationTestValue);
             }
             testRule.Apply(TestLingVars);
             Debug.Log("[applied rule  result] : " + testRule.membershipValue.fuzzy);
+        }
+        [Test]
+        public void Implication()
+        {
+            testRule = LinguisticRule.fromJson(TestJsonRule);
+            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
+            UnityEngine.Object[] jsonLing = 
+                Resources.LoadAll(
+                        "TestLinguistics",
+                        typeof(TextAsset)) ;
+            foreach(TextAsset asset in jsonLing)
+                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
+            foreach(LinguisticVariable LV in TestLingVars)
+            {
+                LV.Fuzzification(fuzzificationTestValue);
+            }
+            testRule.Apply(TestLingVars);
+
+            Debug.Log("[Implication Result] : " + testRule.Implication(testNVal, testMFExpr));
         }
     }
 }

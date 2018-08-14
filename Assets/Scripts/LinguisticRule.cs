@@ -116,5 +116,9 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             Tokenizer ruleTokens = Tokenizer.tokenize(numericRule);
             this.membershipValue.fuzzy = FuzzyEvaluator.computeExpr(ruleTokens, 1, this.fOperator, false);
         }
+        public double Implication(double nValue, string membershipExpression)
+        {
+            return this.implicationM.Implication(nValue, membershipExpression, membershipValue.fuzzy);
+        }
     }
 }
