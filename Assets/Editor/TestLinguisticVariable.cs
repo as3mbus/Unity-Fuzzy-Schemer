@@ -30,17 +30,17 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             testLRs.Add(new LinguisticRule(
                         "HardFight",
                         "Health High and Power High",
-                        Implication.Gaines,
+                        FuzzyImplication.Gaines,
                         FuzzyOperator.MinMax));
             testLRs.Add(new LinguisticRule(
                         "NormalFight",
                         "Health Low and Power Medium",
-                        Implication.Godel,
+                        FuzzyImplication.Godel,
                         FuzzyOperator.Probabilistic));
             testLRs.Add(new LinguisticRule(
                         "EasyFight",
                         "Health Medium and Power Low",
-                        Implication.Gaines,
+                        FuzzyImplication.Gaines,
                         FuzzyOperator.MinMax));
             TestJsonLingVar = 
 @"

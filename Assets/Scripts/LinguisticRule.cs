@@ -5,14 +5,9 @@ using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 using as3mbus.OpenFuzzyScenario.Scripts.PrecedenceClimbing;
 namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
 {
-    public enum Implication :byte 
-    {
-        Mamdani, Larson, Lukasiewicz, StandardStrict, Godel, Gaines, 
-        KleeneDienes, KleeneDienesLuk
-    };
     public class LinguisticRule
     {
-        private Implication implicationMethod = Implication.Mamdani;
+        private IFuzzyImplication implicationMethod = FuzzyImplication.Mamdani;
         private IFuzzyOperator _operator = FuzzyOperator.MinMax;
         private string actualRule;
         public LinguisticRule(string rulval, string rule)
@@ -20,7 +15,11 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             this.membershipValue = new MembershipValue(rulval);
             this.actualRule = rule;
         }
-        public LinguisticRule(string rulval, string rule, Implication impl, IFuzzyOperator opr)
+        public LinguisticRule(
+                string rulval, 
+                string rule, 
+                IFuzzyImplication impl, 
+                IFuzzyOperator opr)
             :this (rulval, rule)
         {
             this.implicationMethod = impl;
@@ -33,7 +32,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             get {return _operator;}
             set {_operator = value;}
         }
-        public Implication implicationM
+        public IFuzzyImplication implicationM
         {
             get {return implicationMethod;}
             set {implicationMethod = value;}
@@ -49,9 +48,8 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                     LRJSO.GetField("Value").str,
                     LRJSO.GetField("Rule").str);
             Result.implicationMethod = 
-                (Implication) Enum.Parse(
-                    typeof( Implication ),
-                    LRJSO.GetField("Implication").str );
+                    FuzzyImplication.TryParse(
+                        LRJSO.GetField("Implication").str );
             Result._operator = 
                 FuzzyOperator.TryParse(
                         LRJSO.GetField("Operator").str);
@@ -70,7 +68,8 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             JSONObject encoded = new JSONObject(JSONObject.Type.OBJECT);
             encoded.AddField("Value", this.membershipValue.linguistic);
             encoded.AddField("Operator", FuzzyOperator.nameOf(this.fOperator));
-            encoded.AddField("Implication", this.implicationM.ToString());
+            encoded.AddField("Implication", 
+                    FuzzyImplication.nameOf(this.implicationM));
             encoded.AddField("Rule", this.rule);
             return encoded;
         }

@@ -13,7 +13,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     {
         
         IFuzzyOperator TestOperator = FuzzyOperator.Probabilistic;
-        Implication TestImplication = Implication.Mamdani;
+        IFuzzyImplication TestImplication = FuzzyImplication.Mamdani;
         string testRuleValue = "Sleep";
         string testActualRule =  "not Power High or Hunger Low";
         string TestJsonRule ; 
@@ -26,7 +26,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
     ""Value"" : """ + testRuleValue  + @""",
     ""Operator"" : """ + FuzzyOperator.nameOf(TestOperator)  + @""",
-    ""Implication"" : """ + TestImplication.ToString() + @""",
+    ""Implication"" : """ + FuzzyImplication.nameOf(TestImplication) + @""",
     ""Rule"" : """ + testActualRule + @"""
 }
 ";
@@ -93,11 +93,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     );
             Assert.AreEqual(
                     TestImplication,
-                    Enum.Parse(
-                        typeof(Implication), 
+                    FuzzyImplication.TryParse(
                         testRule.encodeLinguisticJson().
-                            GetField("Implication").str
-                            )
+                        GetField("Implication").str)
                     );
             Assert.AreEqual(
                     FuzzyOperator.nameOf(TestOperator),
