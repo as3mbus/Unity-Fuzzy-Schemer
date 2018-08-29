@@ -7,9 +7,34 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
 {
     public class LinguisticRule
     {
+        // Attribute //
         private IFuzzyImplication implicationMethod = FuzzyImplication.Mamdani;
         private IFuzzyOperator _operator = FuzzyOperator.MinMax;
         private string actualRule;
+        private ImplicationData implicationData;
+        
+        // Encapsulation and public attribute //
+        public MembershipValue membershipValue;
+        public IFuzzyOperator fOperator
+        {
+            get {return _operator;}
+            set {_operator = value;}
+        }
+        public IFuzzyImplication implicationM
+        {
+            get {return implicationMethod;}
+            set {implicationMethod = value;}
+        }
+        public string rule
+        {
+            get {return actualRule;}
+        }
+        public ImplicationData implData
+        {
+            get {return implicationData;}
+        }
+
+        // Constructor //
         public LinguisticRule(string rulval, string rule)
         {
             this.membershipValue = new MembershipValue(rulval);
@@ -26,21 +51,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             this._operator = opr;
         }
 
-        public MembershipValue membershipValue;
-        public IFuzzyOperator fOperator
-        {
-            get {return _operator;}
-            set {_operator = value;}
-        }
-        public IFuzzyImplication implicationM
-        {
-            get {return implicationMethod;}
-            set {implicationMethod = value;}
-        }
-        public string rule
-        {
-            get {return actualRule;}
-        }
+        // JSON Encode and Decode //
         public static LinguisticRule fromJson(string JsonData)
         {
             JSONObject LRJSO = new JSONObject(JsonData);
@@ -55,6 +66,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                         LRJSO.GetField("Operator").str);
             return Result;
         }
+
         /*
         public JSONObject encodeCompleteJson()
         {
@@ -73,6 +85,8 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             encoded.AddField("Rule", this.rule);
             return encoded;
         }
+
+        // Functions //
         public string numericRule(List<LinguisticVariable> LingVars)
         {
             string[] splitRule = this.actualRule.Split(' ');
@@ -109,7 +123,6 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             }
             return numericRule.Trim();
         }
-
         public void Apply(List<LinguisticVariable> LingVars)
         {
             string numericRule = this.numericRule(LingVars);
@@ -120,5 +133,14 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         {
             return this.implicationM.Implication(nValue, membershipExpression, membershipValue.fuzzy);
         }
+
+        public void Implicate(string membershipExpression)
+        {
+            this.implicationData = new ImplicationData();
+            //for range with certain spacing
+            //for ()
+            implicationData.data.Add(this.Implication(0, membershipExpression));
+        }
+
     }
 }

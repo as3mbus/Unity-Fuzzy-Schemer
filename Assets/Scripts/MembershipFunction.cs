@@ -5,28 +5,26 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
 {
     public class MembershipFunction
     {
+        // Attributes
+        public MembershipValue membershipValue;
+        private string membershipExpression;
+
+        // Encapsulation and Public Attributes
+        public string expression
+        {
+            get {return membershipExpression;}
+        }
+        public int start;
+        public int length;
+
+        // Constructor
         public MembershipFunction(string linguisticsVal, string expression)
         {
             this.membershipValue = new MembershipValue(linguisticsVal);
             this.membershipExpression = expression;
         }
-        public MembershipValue membershipValue;
 
-        private string membershipExpression;
-        public string expression
-        {
-            get {return membershipExpression;}
-        }
-
-        public void Fuzzification(double crispValue)
-        {
-            double fuzzyValue = Eval.ReplaceNEvaluate(
-                    this.expression,
-                    "[A-z]",
-                    crispValue);
-            this.membershipValue.fuzzy = fuzzyValue;
-        }
-
+        // Json Encode and Decode
         public static MembershipFunction fromJson(string JsonData)
         {
             JSONObject MFJSO = new JSONObject(JsonData);
@@ -49,5 +47,16 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             encoded.AddField("MembershipFunction", this.membershipExpression);
             return encoded;
         }
+
+        // Functions
+        public void Fuzzification(double crispValue)
+        {
+            double fuzzyValue = Eval.ReplaceNEvaluate(
+                    this.expression,
+                    "[A-z]",
+                    crispValue);
+            this.membershipValue.fuzzy = fuzzyValue;
+        }
+
     }
 }

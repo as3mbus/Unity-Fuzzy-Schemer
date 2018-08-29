@@ -78,5 +78,9 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         public void Implication()
         {
         }
+        public double Defuzzify()
+        {
+            return 0;
+        }
     }
 }
