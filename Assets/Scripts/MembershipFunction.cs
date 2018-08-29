@@ -16,6 +16,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         }
         public int start;
         public int length;
+        public double weight;
 
         // Constructor
         public MembershipFunction(string linguisticsVal, string expression)

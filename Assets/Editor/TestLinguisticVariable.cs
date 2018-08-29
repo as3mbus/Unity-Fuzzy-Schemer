@@ -19,8 +19,8 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [SetUp]
         public void setup()
         {
-            TextAsset MembershipFunctTextAsset = 
-                Resources.Load("MembershipFunctions") as TextAsset;
+            //TextAsset MembershipFunctTextAsset = 
+            //    Resources.Load("MembershipFunctions") as TextAsset;
             testLinguisticVariable = new LinguisticVariable();
             testMFs = new List<MembershipFunction>();
             testLRs= new List<LinguisticRule>();

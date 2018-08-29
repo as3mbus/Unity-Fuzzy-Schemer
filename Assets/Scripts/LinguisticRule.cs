@@ -129,17 +129,32 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             Tokenizer ruleTokens = Tokenizer.tokenize(numericRule);
             this.membershipValue.fuzzy = FuzzyEvaluator.computeExpr(ruleTokens, 1, this.fOperator, false);
         }
-        public double Implication(double nValue, string membershipExpression)
+        public double Implication(double nValue, MembershipFunction MF)
         {
-            return this.implicationM.Implication(nValue, membershipExpression, membershipValue.fuzzy);
+            return this.implicationM.Implication(nValue, MF.expression, membershipValue.fuzzy);
         }
 
-        public void Implicate(string membershipExpression)
+        public void Implicate(MembershipFunction MF, double space)
         {
             this.implicationData = new ImplicationData();
-            //for range with certain spacing
-            //for ()
-            implicationData.data.Add(this.Implication(0, membershipExpression));
+            this.implicationData.spacing = space;
+            this.implicationData.maximum = 0;
+            this.implicationData.centerPoint = MF.start+MF.length/2;
+            double n = 0;
+            double nImplication;
+            double limit = MF.start+MF.length;
+            while  (n<limit)
+            {
+                nImplication = this.Implication(n, MF);
+                if (nImplication>this.implicationData.maximum)
+                {
+                    this.implicationData.maximum=nImplication;
+                    this.implicationData.MaxAxis.Clear();
+                }
+                if (nImplication == this.implicationData.maximum)
+                    this.implicationData.MaxAxis.Add(nImplication);
+                implicationData.data.Add(nImplication);
+            }
         }
 
     }

@@ -16,7 +16,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         IFuzzyImplication TestImplication = FuzzyImplication.Gaines;
         double fuzzificationTestValue = 35.24;
         double testNVal = 12.1;
-        string testMFExpr = "23+2/x";
+        MembershipFunction testMF = new MembershipFunction("Sleep", "23+2/x");
         string testRuleValue = "Sleep";
         string testActualRule =  "not Power High or Hunger Low";
         string TestJsonRule ; 
@@ -162,7 +162,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             }
             testRule.Apply(TestLingVars);
 
-            Debug.Log("[Implication Result] : " + testRule.Implication(testNVal, testMFExpr));
+            Debug.Log("[Implication Result] : " + testRule.Implication(testNVal, testMF));
         }
     }
 }
