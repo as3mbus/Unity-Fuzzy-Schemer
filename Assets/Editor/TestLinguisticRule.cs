@@ -11,16 +11,20 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     [TestFixture]
     public class TestLinguisticRule
     {
-        
         IFuzzyOperator TestOperator = FuzzyOperator.Probabilistic;
-        IFuzzyImplication TestImplication = FuzzyImplication.Gaines;
-        double fuzzificationTestValue = 35.24;
-        double testNVal = 12.1;
-        MembershipFunction testMF = new MembershipFunction("Sleep", "23+2/x");
+        IFuzzyImplication TestImplication = FuzzyImplication.Mamdani;
         string testRuleValue = "Sleep";
         string testActualRule =  "not Power High or Hunger Low";
-        string TestJsonRule ; 
         LinguisticRule testRule;
+        string TestJsonRule ; 
+        
+        List<LinguisticVariable> TestLingVars;
+
+        double fuzzificationTestValue = 35.24;
+        double testNVal = 0.01;
+        MembershipFunction testMF = new MembershipFunction("Sleep", "23+2/x");       
+
+
         [SetUp]
         public void setup()
         {
@@ -33,6 +37,20 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     ""Rule"" : """ + testActualRule + @"""
 }
 ";
+        }
+        public void MFSetup()
+        {
+            TestLingVars = new List<LinguisticVariable>();
+            UnityEngine.Object[] jsonLing = 
+                Resources.LoadAll(
+                        "TestLinguistics",
+                        typeof(TextAsset)) ;
+            foreach(TextAsset asset in jsonLing)
+                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
+            foreach(LinguisticVariable LV in TestLingVars)
+            {
+                LV.Fuzzification(fuzzificationTestValue);
+            }
         }
         [Test]
         public void Construct()
@@ -114,34 +132,14 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         public void NumericRule()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
-            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
-            UnityEngine.Object[] jsonLing = 
-                Resources.LoadAll(
-                        "TestLinguistics",
-                        typeof(TextAsset)) ;
-            foreach(TextAsset asset in jsonLing)
-                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
-            foreach(LinguisticVariable LV in TestLingVars)
-            {
-                LV.Fuzzification(20.24);
-            }
+            MFSetup();
             Debug.Log("[Numeric Rule Result] = " + testRule.numericRule(TestLingVars));
         }
         [Test]
         public void Apply()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
-            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
-            UnityEngine.Object[] jsonLing = 
-                Resources.LoadAll(
-                        "TestLinguistics",
-                        typeof(TextAsset)) ;
-            foreach(TextAsset asset in jsonLing)
-                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
-            foreach(LinguisticVariable LV in TestLingVars)
-            {
-                LV.Fuzzification(fuzzificationTestValue);
-            }
+            MFSetup();
             testRule.Apply(TestLingVars);
             Debug.Log("[applied rule  result] : " + testRule.membershipValue.fuzzy);
         }
@@ -149,20 +147,24 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         public void Implication()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
-            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
-            UnityEngine.Object[] jsonLing = 
-                Resources.LoadAll(
-                        "TestLinguistics",
-                        typeof(TextAsset)) ;
-            foreach(TextAsset asset in jsonLing)
-                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
-            foreach(LinguisticVariable LV in TestLingVars)
-            {
-                LV.Fuzzification(fuzzificationTestValue);
-            }
+            MFSetup();
             testRule.Apply(TestLingVars);
 
             Debug.Log("[Implication Result] : " + testRule.Implication(testNVal, testMF));
+        }
+        [Test]
+        public void Implicate()
+        {
+            testRule = LinguisticRule.fromJson(TestJsonRule);
+            MFSetup();
+            testRule.Apply(TestLingVars);
+
+            testMF.start = 2;
+            testMF.length = 5;
+
+            testRule.Implicate(testMF, 1);
+            foreach (double impRes in testRule.implData.data)
+                Debug.Log("[ImpRes] : " + impRes);
         }
     }
 }

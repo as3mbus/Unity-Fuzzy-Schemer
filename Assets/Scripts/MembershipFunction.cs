@@ -14,15 +14,38 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         {
             get {return membershipExpression;}
         }
-        public int start;
-        public int length;
+        public double start;
+        public double length;
         public double weight;
 
         // Constructor
-        public MembershipFunction(string linguisticsVal, string expression)
+        public MembershipFunction(string linguisticsVal, string expression, double xstart = 0 , double xlength = 1, double lweight = 1)
         {
             this.membershipValue = new MembershipValue(linguisticsVal);
             this.membershipExpression = expression;
+            this.start = xstart;
+            this.length = xlength;
+            this.weight = lweight;
+        }
+        public static MembershipFunction Triangle(string linguisticVal, double ptA, double ptB, double ptC)
+        {
+            string expression = "max(min(((x-"+ptA+")/("+ptB+"-"+ptA+")),(("+ptC+"-x)/("+ptC+"-"+ptB+"))),0)";
+            return new MembershipFunction(linguisticVal, expression, ptA, ptC-ptA);
+        }
+        public static MembershipFunction Trapezoid(string linguisticVal, double ptA, double ptB, double ptC, double ptD)
+        {
+            string expression = "max(min(min(((x-"+ptA+")/("+ptB+"-"+ptA+")),1),(("+ptD+"-x)/("+ptD+"-"+ptC+"))),0)";
+            return new MembershipFunction(linguisticVal, expression, ptA, ptD-ptA);
+        }
+        public static MembershipFunction Gaussian(string linguisticVal, double ptC, double ptW)
+        {
+            string expression = "e^((-(1/2))*(((x-"+ptC+")/"+ptW+")^2))";
+            return new MembershipFunction(linguisticVal, expression, ptC-ptW, ptC+ptW);
+        }
+        public static MembershipFunction Bell(string linguisticVal, double ptC, double ptW, double ptB)
+        {
+            string expression = "1/(1+abs(((x-"+ptC+")/"+ptW+"))^(2*"+ptB+"))";
+            return new MembershipFunction(linguisticVal, expression, ptC-ptW, ptC+ptW);
         }
 
         // Json Encode and Decode

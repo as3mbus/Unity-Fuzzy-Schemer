@@ -14,8 +14,8 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         public void testEvaluate()
         {
             var parser = new ExpressionParser();
-            double v = parser.Evaluate("max(max(max(2,135),20),20)");
-            Assert.AreEqual(135,v);
+            double v = parser.Evaluate("1/(1+abs(((5-10)/4))^(2*1))");
+            Assert.AreEqual(1,v);
         } 
         [Test]
         public void testCustomFunction()

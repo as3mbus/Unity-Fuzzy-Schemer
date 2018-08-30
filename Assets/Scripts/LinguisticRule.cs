@@ -140,7 +140,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             this.implicationData.spacing = space;
             this.implicationData.maximum = 0;
             this.implicationData.centerPoint = MF.start+MF.length/2;
-            double n = 0;
+            double n = MF.start;
             double nImplication;
             double limit = MF.start+MF.length;
             while  (n<limit)
@@ -154,6 +154,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                 if (nImplication == this.implicationData.maximum)
                     this.implicationData.MaxAxis.Add(nImplication);
                 implicationData.data.Add(nImplication);
+                n+=space;
             }
         }
 
