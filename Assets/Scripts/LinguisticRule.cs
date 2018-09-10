@@ -12,6 +12,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         private IFuzzyOperator _operator = FuzzyOperator.MinMax;
         private string actualRule;
         private ImplicationData implicationData;
+        private double ruleWeight;
         
         // Encapsulation and public attribute //
         public MembershipValue membershipValue;
@@ -33,22 +34,29 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         {
             get {return implicationData;}
         }
+        public double weight
+        {
+            get {return ruleWeight;}
+        }
 
         // Constructor //
-        public LinguisticRule(string rulval, string rule)
+        public LinguisticRule(string rulval, string rule, double rWeight=-1)
         {
             this.membershipValue = new MembershipValue(rulval);
             this.actualRule = rule;
+            this.ruleWeight = rWeight;
         }
         public LinguisticRule(
                 string rulval, 
                 string rule, 
                 IFuzzyImplication impl, 
-                IFuzzyOperator opr)
+                IFuzzyOperator opr,
+                double rWeight=-1)
             :this (rulval, rule)
         {
             this.implicationMethod = impl;
             this._operator = opr;
+            this.ruleWeight = rWeight;
         }
 
         // JSON Encode and Decode //
@@ -140,6 +148,8 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             this.implicationData.spacing = space;
             this.implicationData.maximum = 0;
             this.implicationData.centerPoint = MF.start+MF.length/2;
+            if(ruleWeight==-1)
+                this.ruleWeight = MF.weight;
             double n = MF.start;
             double nImplication;
             double limit = MF.start+MF.length;

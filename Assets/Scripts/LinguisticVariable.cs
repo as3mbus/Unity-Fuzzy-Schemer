@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 
 namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
 {
@@ -75,12 +76,14 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                 LR.Apply(LingVars);
             }
         }
-        public void Implication()
+        public void Implicate(double space)
         {
+            foreach (LinguisticRule rule in this.linguisticRules)
+                rule.Implicate(this.membershipFunctions.Find(x => x.membershipValue.linguistic == rule.membershipValue.linguistic), space);
         }
-        public double Defuzzify()
+        public double Defuzzify(IDefuzzification DfuzzMethod)
         {
-            return 0;
+           return DfuzzMethod.defuzzify(this.linguisticRules); 
         }
     }
 }

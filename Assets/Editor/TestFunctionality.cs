@@ -14,8 +14,8 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         public void testEvaluate()
         {
             var parser = new ExpressionParser();
-            double v = parser.Evaluate("1/(1+abs(((5-10)/4))^(2*1))");
-            Assert.AreEqual(1,v);
+            double v = parser.Evaluate("1/(1+e^((-3)*(10-10)))");
+            Assert.AreEqual(0.5,v);
         } 
         [Test]
         public void testCustomFunction()

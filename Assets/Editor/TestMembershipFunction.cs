@@ -10,6 +10,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         MembershipFunction TestMF;
         string TestLinguisticName = "High";
         string TestExpression = "a+3/20";
+        double testStartX = 3;
+        double testLengthX = 10;
+        double testWeight = 1;
         double TestCrispValue = 100d;
         string TestJson;
         [SetUp]
@@ -20,6 +23,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                 {
                   ""Name"" : """ + TestLinguisticName + @""",
                   ""MembershipFunction"" : """ + TestExpression + @"""
+                  ""StartAxis"" : """ + testStartX + @"""
+                  ""AxisRange"" : """ + testLengthX + @"""
+                  ""LinguisticWeight"" : """ + testWeight + @"""
                 }
                 ";
             TestMF = new MembershipFunction(
@@ -45,6 +51,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     TestLinguisticName, 
                     TestMF.membershipValue.linguistic);
             Assert.AreEqual(TestExpression, TestMF.expression);
+            Assert.AreEqual(testStartX, TestMF.start);
+            Assert.AreEqual(testLengthX, TestMF.length);
+            Assert.AreEqual(testWeight, TestMF.weight);
         }
         [Test]
         public void TestFuzzification()

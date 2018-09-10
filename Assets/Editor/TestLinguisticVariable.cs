@@ -12,6 +12,8 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         string testVersion = "0.1";
         string testType = "Linguistics";
         string testName = "TestName";
+        double testCrisp = 35.24;
+        IDefuzzification dfuzz = Defuzzification.WeightedAverage;
         List<MembershipFunction> testMFs;
         List<LinguisticRule> testLRs;
         TextAsset MembershipFunctTextAsset;
@@ -24,9 +26,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             testLinguisticVariable = new LinguisticVariable();
             testMFs = new List<MembershipFunction>();
             testLRs= new List<LinguisticRule>();
-            testMFs.Add(new MembershipFunction("Low","a+3"));
-            testMFs.Add(new MembershipFunction("Medium","a+10"));
-            testMFs.Add(new MembershipFunction("High","a+15"));
+            testMFs.Add(new MembershipFunction("EasyFight","a+3"));
+            testMFs.Add(new MembershipFunction("NormalFight","a+10"));
+            testMFs.Add(new MembershipFunction("HardFight","a+15"));
             testLRs.Add(new LinguisticRule(
                         "HardFight",
                         "Health High and Power High",
@@ -155,12 +157,66 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             foreach(TextAsset asset in jsonLing)
                 TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
             foreach(LinguisticVariable LV in TestLingVars)
-                LV.Fuzzification(35.24);
+                LV.Fuzzification(testCrisp);
             testLinguisticVariable.ApplyRule(TestLingVars);
+            Debug.Log("[Rule Application Result Start]");
             foreach (LinguisticRule rule in testLinguisticVariable.linguisticRules)
                 Debug.Log(
                         "[Lingusitic] : " + rule.membershipValue.linguistic + "\n"
                         + "[Fuzzy] : " + rule.membershipValue.fuzzy );
+            Debug.Log("[ Rule Application Result End ]");
         }
+        [Test]
+        public void Implicate()
+        {
+            double axis=0;
+            testLinguisticVariable = 
+                LinguisticVariable.fromJson(TestJsonLingVar);
+            testLinguisticVariable.Fuzzification(30);
+            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
+            UnityEngine.Object[] jsonLing = 
+                Resources.LoadAll(
+                        "TestLinguistics",
+                        typeof(TextAsset)) ;
+            foreach(TextAsset asset in jsonLing)
+                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
+            foreach(LinguisticVariable LV in TestLingVars)
+                LV.Fuzzification(testCrisp);
+            testLinguisticVariable.ApplyRule(TestLingVars);
+            testLinguisticVariable.Implicate(1);
+            foreach(LinguisticRule rule in testLinguisticVariable.linguisticRules)
+            {
+                Debug.Log("[Implication Result " + rule.membershipValue.linguistic + " Start]");
+                axis =0;
+                foreach(double implRes in rule.implData.data)
+                {
+                    Debug.Log("[implRes @" + axis + " ] = " + implRes );
+                    axis+= rule.implData.spacing;
+                }
+                Debug.Log("[ Implication Result " + rule.membershipValue.linguistic + " End ]");
+            }
+        }
+        [Test]
+        public void Defuzzify()
+        {
+            testLinguisticVariable = 
+                LinguisticVariable.fromJson(TestJsonLingVar);
+            testLinguisticVariable.Fuzzification(30);
+            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
+            UnityEngine.Object[] jsonLing = 
+                Resources.LoadAll(
+                        "TestLinguistics",
+                        typeof(TextAsset)) ;
+            foreach(TextAsset asset in jsonLing)
+                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
+            foreach(LinguisticVariable LV in TestLingVars)
+                LV.Fuzzification(testCrisp);
+            testLinguisticVariable.ApplyRule(TestLingVars);
+            testLinguisticVariable.Implicate(1);
+            Debug.Log("[Defuzzification Method] : " + Defuzzification.nameOf(dfuzz) );
+            Debug.Log("[Defuzzification Result] : " + dfuzz.defuzzify(testLinguisticVariable.linguisticRules) );
+            
+        }
+
     }
 }

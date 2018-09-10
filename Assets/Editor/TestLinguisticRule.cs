@@ -163,8 +163,10 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             testMF.length = 5;
 
             testRule.Implicate(testMF, 1);
+            Debug.Log("[Implication Result Start]");
             foreach (double impRes in testRule.implData.data)
                 Debug.Log("[ImpRes] : " + impRes);
+            Debug.Log("[ Implication Result End ]");
         }
     }
 }

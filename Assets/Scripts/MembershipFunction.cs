@@ -47,6 +47,11 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             string expression = "1/(1+abs(((x-"+ptC+")/"+ptW+"))^(2*"+ptB+"))";
             return new MembershipFunction(linguisticVal, expression, ptC-ptW, ptC+ptW);
         }
+        public static MembershipFunction Sigmoid(string linguisticVal, double ptA, double ptC)
+        {
+            string expression = "1/(1+e^((-"+ptA+")*(x-"+ptC+")))";
+            return new MembershipFunction(linguisticVal, expression, ptC-ptC, ptC+ptC);
+        }
 
         // Json Encode and Decode
         public static MembershipFunction fromJson(string JsonData)
@@ -54,7 +59,11 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             JSONObject MFJSO = new JSONObject(JsonData);
             MembershipFunction result = new MembershipFunction(
                     MFJSO.GetField("Name").str,
-                    MFJSO.GetField("MembershipFunction").str);
+                    MFJSO.GetField("MembershipFunction").str,
+                    MFJSO.GetField("StartAxis").n,
+                    MFJSO.GetField("AxisRange").n,
+                    MFJSO.GetField("LinguisticWeight").n
+                    );
             return result;
         }
         public JSONObject encodeCompleteJson()
@@ -69,6 +78,9 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             JSONObject encoded = new JSONObject(JSONObject.Type.OBJECT);
             encoded.AddField("Name", this.membershipValue.linguistic);
             encoded.AddField("MembershipFunction", this.membershipExpression);
+            encoded.AddField("StartAxis", Eval.double2Float(this.start));
+            encoded.AddField("AxisRange", Eval.double2Float(this.length));
+            encoded.AddField("LinguisticWeight", Eval.double2Float(this.weight));
             return encoded;
         }
 

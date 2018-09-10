@@ -37,5 +37,13 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             encoded.AddField("Name", this.linguisticValue);
             return encoded;
         }
+        public static MembershipValue fromJson(string JsonData)
+        {
+            JSONObject MVJSO = new JSONObject(JsonData);
+            MembershipValue result = new MembershipValue(
+                    MVJSO.GetField("Name").str,
+                    MVJSO.GetField("Value").n);
+            return result;
+        }
     }
 }

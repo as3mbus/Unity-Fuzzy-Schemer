@@ -45,5 +45,18 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     TestLinguisticValue,
                     TestValue.encodeCompleteJson().GetField("Name").str);
         }
+        [Test]
+        public void CompleteDecode()
+        {
+            TestValue = new MembershipValue(
+                    TestLinguisticValue, TestFuzzyValue);
+            Assert.AreEqual(
+                    TestLinguisticValue,
+                    TestValue.encodeCompleteJson().GetField("Name").str);
+            Assert.AreEqual(
+                    TestFuzzyValue,
+                    TestValue.encodeCompleteJson().GetField("Value").f,
+                    0.01d);
+        }
     }
 }

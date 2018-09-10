@@ -6,15 +6,24 @@
     [
         {
             "Name" : "High",
-            "MembershipFunction" : "100/a+3"
+            "MembershipFunction" : "100/a+3",
+            "StartAxis" : 1,
+            "AxisRange" : 17.3,
+            "LinguisticWeight" : 13
         },
         {
             "Name" : "Medium",
-            "MembershipFunction" : "257+a-300/3"
+            "MembershipFunction" : "257+a-300/3",
+            "StartAxis" : 1,
+            "AxisRange" : 17.3,
+            "LinguisticWeight" : 13
         },
         {
             "Name" : "Low",
-            "MembershipFunction" : "135*a-27"
+            "MembershipFunction" : "135*a-27",
+            "StartAxis" : 1,
+            "AxisRange" : 17.3,
+            "LinguisticWeight" : 13
         }
     ]
 }
