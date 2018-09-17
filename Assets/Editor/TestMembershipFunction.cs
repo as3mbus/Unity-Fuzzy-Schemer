@@ -1,4 +1,6 @@
 using NUnit.Framework;
+using UnityEngine;
+using System.Linq;
 using as3mbus.OpenFuzzyScenario.Scripts.Objects;
 using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 
@@ -8,93 +10,113 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     public class TestMembershipFunction
     {
         MembershipFunction TestMF;
-        string TestLinguisticName = "High";
-        string TestExpression = "a+3/20";
-        double testStartX = 3;
-        double testLengthX = 10;
+        string LinguisticName = "High";
+        string Expression = "a+3/20";
+        double StartX = 3;
+        double LengthX = 10;
         double testWeight = 1;
-        double TestCrispValue = 100d;
-        string TestJson;
+        double CrispVal = 100d;
+        string Type = "Triangle";
+        double[] Spec = new double[] {1,5,10};
+        string Json1, Json2;
         [SetUp]
         public void setup()
         {
-            TestJson = 
+            Json1 = 
                 @"
                 {
-                  ""Name"" : """ + TestLinguisticName + @""",
-                  ""MembershipFunction"" : """ + TestExpression + @"""
-                  ""StartAxis"" : """ + testStartX + @"""
-                  ""AxisRange"" : """ + testLengthX + @"""
-                  ""LinguisticWeight"" : """ + testWeight + @"""
+                  ""Name"" : """ + LinguisticName + @""",
+                  ""MembershipFunction"" : """ + Expression + @""",
+                  ""StartAxis"" : " + StartX + @",
+                  ""AxisRange"" : " + LengthX + @",
+                  ""LinguisticWeight"" : " + testWeight + @"
+                }
+                ";
+            Json2= 
+                @"
+                {
+                  ""Name"" : """ + LinguisticName + @""",
+                  ""Type"" : """ + Type + @""",
+                  ""Spec"" : [" + string.Join(",",Spec.Select(x=>x.ToString()).ToArray()) + @"]
                 }
                 ";
             TestMF = new MembershipFunction(
-                    TestLinguisticName, 
-                    TestExpression);
+                    LinguisticName, 
+                    Expression);
         }
         [Test]
-        public void TestConstruct()
+        public void Construct()
         {
             TestMF = new MembershipFunction(
-                    TestLinguisticName, 
-                    TestExpression);
+                    LinguisticName, 
+                    Expression);
             Assert.AreEqual(
-                    TestLinguisticName, 
+                    LinguisticName, 
                     TestMF.membershipValue.linguistic);
-            Assert.AreEqual(TestExpression, TestMF.expression);
+            Assert.AreEqual(Expression, TestMF.expression);
         }
         [Test]
-        public void TestJsonConstruct()
+        public void JsonConstruct()
         {
-            TestMF = MembershipFunction.fromJson(TestJson);
+            TestMF = MembershipFunction.fromJson(Json1);
             Assert.AreEqual(
-                    TestLinguisticName, 
+                    LinguisticName, 
                     TestMF.membershipValue.linguistic);
-            Assert.AreEqual(TestExpression, TestMF.expression);
-            Assert.AreEqual(testStartX, TestMF.start);
-            Assert.AreEqual(testLengthX, TestMF.length);
+            Assert.AreEqual(Expression, TestMF.expression);
+            Assert.AreEqual(StartX, TestMF.start);
+            Assert.AreEqual(LengthX, TestMF.length);
             Assert.AreEqual(testWeight, TestMF.weight);
         }
         [Test]
-        public void TestFuzzification()
+        public void Generate()
         {
-            TestMF.Fuzzification(TestCrispValue);
+            Debug.Log(Json2);
+            TestMF = MembershipFunction.fromJson(Json2);
+            Assert.AreEqual(
+                    LinguisticName, 
+                    TestMF.membershipValue.linguistic);
+            Debug.Log("[MF GENERATE RESULT]\n"+ TestMF.encodeCompleteJson().Print(true));
+        }
+        [Test]
+        public void Fuzzification()
+        {
+            TestMF.Fuzzification(CrispVal);
             Assert.AreEqual(
                     Eval.ReplaceNEvaluate(
-                        TestExpression, "[A-z]", 
-                        TestCrispValue),
+                        Expression, "[A-z]", 
+                        CrispVal),
                     TestMF.membershipValue.fuzzy); 
         }
         [Test]
-        public void testCompleteEncode()
+        public void CompleteEncode()
         {
             TestMF = new MembershipFunction(
-                    TestLinguisticName, TestExpression);
-            TestMF.Fuzzification(TestCrispValue);
+                    LinguisticName, Expression);
+            TestMF.Fuzzification(CrispVal);
             Assert.AreEqual(
-                    TestLinguisticName,
+                    LinguisticName,
                     TestMF.encodeCompleteJson().GetField("Name").str);
             Assert.AreEqual(
-                    TestExpression,
+                    Expression,
                     TestMF.encodeCompleteJson().
                         GetField("MembershipFunction").str);
             Assert.AreEqual(
                     Eval.ReplaceNEvaluate(
-                        TestExpression, "[A-z]", 
-                        TestCrispValue),
+                        Expression, "[A-z]", 
+                        CrispVal),
                     TestMF.encodeCompleteJson().GetField("Fuzzy").f,
                     0.01d);
         }
         [Test]
-        public void testLinguisticEncode()
+        public void LinguisticEncode()
         {
             TestMF = new MembershipFunction(
-                    TestLinguisticName, TestExpression);
+                    LinguisticName, Expression);
             Assert.AreEqual(
-                    TestLinguisticName,
+                    LinguisticName,
                     TestMF.encodeLinguisticJson().GetField("Name").str);
             Assert.AreEqual(
-                    TestExpression,
+                    Expression,
                     TestMF.encodeLinguisticJson().
                         GetField("MembershipFunction").str);
         }

@@ -57,10 +57,10 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                 as TextAsset;
             string jsonString = asset.text;
             JSONObject j = new JSONObject(jsonString);
-            string parseJsonResult = j.GetField("Version").str; 
-            Debug.Log( "[Json Parsing Result for Key \"Version\"]\n"
-                    + parseJsonResult);
-            Assert.AreEqual( typeof(string) , parseJsonResult.GetType() ); 
+            // string parseJsonResult = j.GetField("Version").str; 
+            // Debug.Log( "[Json Parsing Result for Key \"Version\"]\n"
+                    // + parseJsonResult);
+            Assert.True(j.HasField("Version")); 
         }
     }
 }

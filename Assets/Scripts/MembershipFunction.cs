@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 
@@ -26,6 +27,24 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             this.start = xstart;
             this.length = xlength;
             this.weight = lweight;
+        }
+        public static MembershipFunction Generate(string linguisticVal, string type, double[] spec)
+        {
+            switch(type.ToLower())
+            {
+                case "triangle" :
+                    return Triangle(linguisticVal, spec[0], spec[1], spec[2]);
+                case "trapezoid" :
+                    return Trapezoid(linguisticVal, spec[0], spec[1], spec[2], spec[3]);
+                case "gaussian" :
+                    return Gaussian(linguisticVal, spec[0], spec[1]);
+                case "bell" :
+                    return Bell(linguisticVal, spec[0], spec[1], spec[2]);
+                case "sigmoid" :
+                    return Sigmoid(linguisticVal, spec[0], spec[1]);
+                default :
+                    return null;
+            }
         }
         public static MembershipFunction Triangle(string linguisticVal, double ptA, double ptB, double ptC)
         {
@@ -57,14 +76,28 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         public static MembershipFunction fromJson(string JsonData)
         {
             JSONObject MFJSO = new JSONObject(JsonData);
-            MembershipFunction result = new MembershipFunction(
-                    MFJSO.GetField("Name").str,
-                    MFJSO.GetField("MembershipFunction").str,
-                    MFJSO.GetField("StartAxis").n,
-                    MFJSO.GetField("AxisRange").n,
-                    MFJSO.GetField("LinguisticWeight").n
-                    );
-            return result;
+            if (MFJSO.HasField("MembershipFunction"))
+            {
+                return new MembershipFunction(
+                        MFJSO.GetField("Name").str,
+                        MFJSO.GetField("MembershipFunction").str,
+                        MFJSO.GetField("StartAxis").n,
+                        MFJSO.GetField("AxisRange").n,
+                        MFJSO.GetField("LinguisticWeight").n
+                        );
+            }
+            else 
+            {
+                List<double> specVals = new List<double>();
+                foreach(JSONObject j in MFJSO.GetField("Spec").list)
+                    specVals.Add(j.n);
+
+                return MembershipFunction.Generate(
+                        MFJSO.GetField("Name").str,
+                        MFJSO.GetField("Type").str,
+                        specVals.ToArray()
+                        );
+            }
         }
         public JSONObject encodeCompleteJson()
         {

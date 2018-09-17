@@ -139,7 +139,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Assert.AreEqual(
                     45,
                     testLinguisticVariable.membershipFunctions.Find(
-                        mf => mf.membershipValue.linguistic.Equals("High"))
+                        mf => mf.membershipValue.linguistic.Equals("HardFight"))
                     .membershipValue.fuzzy
                     );
         }
