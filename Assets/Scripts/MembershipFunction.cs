@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using as3mbus.OpenFuzzyScenario.Scripts.Statics;
@@ -68,7 +69,12 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         }
         public static MembershipFunction Sigmoid(string linguisticVal, double ptA, double ptC)
         {
-            string expression = "1/(1+e^((-"+ptA+")*(x-"+ptC+")))";
+            string expression = "1/(1+e^(("+(-ptA)+")*(x-"+ptC+")))";
+            return new MembershipFunction(linguisticVal, expression, ptC-ptC, ptC+ptC);
+        }
+        public static MembershipFunction ClosedSigmoid(string linguisticVal, double ptA, double ptC, double ptA2, double ptC2)
+        {
+            string expression = "(1/(1+e^(("+(-Math.Abs(ptA))+")*(x-"+ptC+"))))-(1/(1+e^(("+(-Math.Abs(ptA2))+")*(x-"+ptC2+"))))";
             return new MembershipFunction(linguisticVal, expression, ptC-ptC, ptC+ptC);
         }
 
@@ -120,11 +126,35 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         // Functions
         public void Fuzzification(double crispValue)
         {
-            double fuzzyValue = Eval.ReplaceNEvaluate(
+            this.membershipValue.fuzzy = Eval.ReplaceNEvaluate(
                     this.expression,
                     "[A-z]",
                     crispValue);
-            this.membershipValue.fuzzy = fuzzyValue;
+        }
+        
+        public double Fuzzify(double crispValue)
+        {
+            return Eval.ReplaceNEvaluate(
+                    this.expression,
+                    "[A-z]",
+                    crispValue);
+        }
+        public void rangeTest(double min, double max, double precision)
+        {
+            double iter=min;
+            double fuzzyVal=0;
+            double recentlyActiveAxis=0;
+            while(iter<=max)
+            {
+                
+                fuzzyVal=Fuzzify(iter);
+                if(fuzzyVal>0.1)
+                    if (this.start>iter)
+                        this.start=iter;
+                    else
+                        recentlyActiveAxis=iter;
+                iter+=precision;
+            }
         }
 
     }
