@@ -6,7 +6,7 @@
     [
         {
             "Name" : "High",
-            "MembershipFunction" : "92+a-123",
+            "MembershipFunction" : "92+@-123",
             "StartAxis" : 1,
             "AxisRange" : 17.3,
             "LinguisticWeight" : 13
@@ -20,7 +20,7 @@
         },
         {
             "Name" : "Low",
-            "MembershipFunction" : "231*a/12.21",
+            "MembershipFunction" : "231*@/12.21",
             "StartAxis" : 1,
             "AxisRange" : 17.3,
             "LinguisticWeight" : 13

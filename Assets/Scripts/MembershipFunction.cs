@@ -43,38 +43,40 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                     return Bell(linguisticVal, spec[0], spec[1], spec[2]);
                 case "sigmoid" :
                     return Sigmoid(linguisticVal, spec[0], spec[1]);
+                case "closedsigmoid" :
+                    return ClosedSigmoid(linguisticVal, spec[0], spec[1], spec[2], spec[3]);
                 default :
                     return null;
             }
         }
         public static MembershipFunction Triangle(string linguisticVal, double ptA, double ptB, double ptC)
         {
-            string expression = "max(min(((x-"+ptA+")/("+ptB+"-"+ptA+")),(("+ptC+"-x)/("+ptC+"-"+ptB+"))),0)";
+            string expression = "max(min(((@-"+ptA+")/("+ptB+"-"+ptA+")),(("+ptC+"-@)/("+ptC+"-"+ptB+"))),0)";
             return new MembershipFunction(linguisticVal, expression, ptA, ptC-ptA);
         }
         public static MembershipFunction Trapezoid(string linguisticVal, double ptA, double ptB, double ptC, double ptD)
         {
-            string expression = "max(min(min(((x-"+ptA+")/("+ptB+"-"+ptA+")),1),(("+ptD+"-x)/("+ptD+"-"+ptC+"))),0)";
+            string expression = "max(min(min(((@-"+ptA+")/("+ptB+"-"+ptA+")),1),(("+ptD+"-@)/("+ptD+"-"+ptC+"))),0)";
             return new MembershipFunction(linguisticVal, expression, ptA, ptD-ptA);
         }
         public static MembershipFunction Gaussian(string linguisticVal, double ptC, double ptW)
         {
-            string expression = "e^((-(1/2))*(((x-"+ptC+")/"+ptW+")^2))";
+            string expression = "e^((-(1/2))*(((@-"+ptC+")/"+ptW+")^2))";
             return new MembershipFunction(linguisticVal, expression, ptC-ptW, ptC+ptW);
         }
         public static MembershipFunction Bell(string linguisticVal, double ptC, double ptW, double ptB)
         {
-            string expression = "1/(1+abs(((x-"+ptC+")/"+ptW+"))^(2*"+ptB+"))";
+            string expression = "1/(1+abs(((@-"+ptC+")/"+ptW+"))^(2*"+ptB+"))";
             return new MembershipFunction(linguisticVal, expression, ptC-ptW, ptC+ptW);
         }
         public static MembershipFunction Sigmoid(string linguisticVal, double ptA, double ptC)
         {
-            string expression = "1/(1+e^(("+(-ptA)+")*(x-"+ptC+")))";
+            string expression = "1/(1+e^(("+(-ptA)+")*(@-"+ptC+")))";
             return new MembershipFunction(linguisticVal, expression, ptC-ptC, ptC+ptC);
         }
         public static MembershipFunction ClosedSigmoid(string linguisticVal, double ptA, double ptC, double ptA2, double ptC2)
         {
-            string expression = "(1/(1+e^(("+(-Math.Abs(ptA))+")*(x-"+ptC+"))))-(1/(1+e^(("+(-Math.Abs(ptA2))+")*(x-"+ptC2+"))))";
+            string expression = "(1/(1+e^(("+(-Math.Abs(ptA))+")*(@-"+ptC+"))))-(1/(1+e^(("+(-Math.Abs(ptA2))+")*(x-"+ptC2+"))))";
             return new MembershipFunction(linguisticVal, expression, ptC-ptC, ptC+ptC);
         }
 
@@ -126,20 +128,16 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         // Functions
         public void Fuzzification(double crispValue)
         {
-            this.membershipValue.fuzzy = Eval.ReplaceNEvaluate(
-                    this.expression,
-                    "[A-z]",
-                    crispValue);
+            this.membershipValue.fuzzy = Fuzzify(crispValue);
         }
-        
         public double Fuzzify(double crispValue)
         {
             return Eval.ReplaceNEvaluate(
                     this.expression,
-                    "[A-z]",
+                    "@",
                     crispValue);
         }
-        public void rangeTest(double min, double max, double precision)
+        public void rangeCalculation(double min, double max, double precision, double threshold)
         {
             double iter=min;
             double fuzzyVal=0;
@@ -148,13 +146,14 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             {
                 
                 fuzzyVal=Fuzzify(iter);
-                if(fuzzyVal>0.1)
+                if(fuzzyVal>threshold)
                     if (this.start>iter)
                         this.start=iter;
                     else
                         recentlyActiveAxis=iter;
                 iter+=precision;
             }
+            this.length=recentlyActiveAxis-this.start;
         }
 
     }

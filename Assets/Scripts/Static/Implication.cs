@@ -1,4 +1,5 @@
 using System;
+using UnityEngine;
 
 namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
 {
@@ -20,7 +21,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
             {
                 double fuzzyValue = Eval.ReplaceNEvaluate(
                         membershipExpression,
-                        "[A-z]",
+                        "@",
                         nValue);
                 return Math.Min(fuzzyValue,fuzzyMembership);
             }
@@ -34,7 +35,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
             {
                 double fuzzyValue = Eval.ReplaceNEvaluate(
                         membershipExpression,
-                        "[A-z]",
+                        "@",
                         nValue);
                 return fuzzyValue*fuzzyMembership;
             }
@@ -48,7 +49,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
             {
                 double fuzzyValue = Eval.ReplaceNEvaluate(
                         membershipExpression,
-                        "[A-z]",
+                        "@",
                         nValue);
                 return Math.Min(1, 1-fuzzyValue+fuzzyMembership);
             }
@@ -62,7 +63,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
             {
                 double fuzzyValue = Eval.ReplaceNEvaluate(
                         membershipExpression,
-                        "[A-z]",
+                        "@",
                         nValue);
                 if (fuzzyValue <= fuzzyMembership)
                     return 1;
@@ -79,7 +80,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
             {
                 double fuzzyValue = Eval.ReplaceNEvaluate(
                         membershipExpression,
-                        "[A-z]",
+                        "@",
                         nValue);
                 if (fuzzyValue <= fuzzyMembership)
                     return 1;
@@ -96,7 +97,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
             {
                 double fuzzyValue = Eval.ReplaceNEvaluate(
                         membershipExpression,
-                        "[A-z]",
+                        "@",
                         nValue);
                 if (fuzzyValue <= fuzzyMembership)
                     return 1;
@@ -113,7 +114,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
             {
                 double fuzzyValue = Eval.ReplaceNEvaluate(
                         membershipExpression,
-                        "[A-z]",
+                        "@",
                         nValue);
                 return Math.Max(1-fuzzyValue, fuzzyMembership);
             }
@@ -127,7 +128,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
             {
                 double fuzzyValue = Eval.ReplaceNEvaluate(
                         membershipExpression,
-                        "[A-z]",
+                        "@",
                         nValue);
                 return 1-fuzzyValue+fuzzyValue*fuzzyMembership;
             }

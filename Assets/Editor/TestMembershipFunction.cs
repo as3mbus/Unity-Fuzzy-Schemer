@@ -11,7 +11,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     {
         MembershipFunction TestMF;
         string LinguisticName = "High";
-        string Expression = "a+3/20";
+        string Expression = "@+3/20";
         double StartX = 3;
         double LengthX = 10;
         double testWeight = 1;
@@ -75,6 +75,19 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Assert.AreEqual(
                     LinguisticName, 
                     TestMF.membershipValue.linguistic);
+            TestMF.Fuzzification(4);
+            Debug.Log("[MF GENERATE RESULT]\n"+ TestMF.encodeCompleteJson().Print(true));
+        }
+        [Test]
+        public void RangeCalculation()
+        {
+            Debug.Log(Json2);
+            TestMF = MembershipFunction.fromJson(Json2);
+            Assert.AreEqual(
+                    LinguisticName, 
+                    TestMF.membershipValue.linguistic);
+            TestMF.Fuzzification(4);
+            TestMF.rangeCalculation(1,30,0.1,0.1);
             Debug.Log("[MF GENERATE RESULT]\n"+ TestMF.encodeCompleteJson().Print(true));
         }
         [Test]
@@ -83,7 +96,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             TestMF.Fuzzification(CrispVal);
             Assert.AreEqual(
                     Eval.ReplaceNEvaluate(
-                        Expression, "[A-z]", 
+                        Expression, "@", 
                         CrispVal),
                     TestMF.membershipValue.fuzzy); 
         }
@@ -102,7 +115,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                         GetField("MembershipFunction").str);
             Assert.AreEqual(
                     Eval.ReplaceNEvaluate(
-                        Expression, "[A-z]", 
+                        Expression, "@", 
                         CrispVal),
                     TestMF.encodeCompleteJson().GetField("Fuzzy").f,
                     0.01d);

@@ -26,9 +26,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             testLinguisticVariable = new LinguisticVariable();
             testMFs = new List<MembershipFunction>();
             testLRs= new List<LinguisticRule>();
-            testMFs.Add(new MembershipFunction("EasyFight","a+3"));
-            testMFs.Add(new MembershipFunction("NormalFight","a+10"));
-            testMFs.Add(new MembershipFunction("HardFight","a+15"));
+            testMFs.Add(new MembershipFunction("EasyFight","@+3"));
+            testMFs.Add(new MembershipFunction("NormalFight","@+10"));
+            testMFs.Add(new MembershipFunction("HardFight","@+15"));
             testLRs.Add(new LinguisticRule(
                         "HardFight",
                         "Health High and Power High",

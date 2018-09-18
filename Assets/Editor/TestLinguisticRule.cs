@@ -11,8 +11,8 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     [TestFixture]
     public class TestLinguisticRule
     {
-        IFuzzyOperator TestOperator = FuzzyOperator.Probabilistic;
-        IFuzzyImplication TestImplication = FuzzyImplication.Mamdani;
+        IFuzzyOperator TestOperator = FuzzyOperator.MinMax;
+        IFuzzyImplication TestImplication = FuzzyImplication.Larson;
         string testRuleValue = "Sleep";
         string testActualRule =  "not Power High or Hunger Low";
         LinguisticRule testRule;
@@ -22,7 +22,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
 
         double fuzzificationTestValue = 35.24;
         double testNVal = 0.01;
-        MembershipFunction testMF = new MembershipFunction("Sleep", "23+2/x");       
+        MembershipFunction testMF = new MembershipFunction("Sleep", "23+2/@");       
 
 
         [SetUp]

@@ -30,16 +30,15 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [Test]
         public void testReplaceAndEvaluate()
         {
-            string testExpression = "a+3/20";
-            string testRegex = "[a]";
+            string testExpression = "@+3/20";
+            string testRegex = "@";
             double testValue = 30d;
             double expectedResult = 30.15d;
             Assert.AreEqual(
                     expectedResult,
                     Eval.ReplaceNEvaluate(
-                        testExpression, testRegex, testValue)
+                        testExpression, testRegex,testValue)
                     );
-
         }
         [Test]
         public void testReadFile()

@@ -6,14 +6,14 @@
     [
         {
             "Name" : "High",
-            "MembershipFunction" : "30-a/20",
+            "MembershipFunction" : "30-@/20",
             "StartAxis" : 1,
             "AxisRange" : 17.3,
             "LinguisticWeight" : 13
         },
         {
             "Name" : "Medium",
-            "MembershipFunction" : "a*3+2+1",
+            "MembershipFunction" : "@*3+2+1",
             "StartAxis" : 1,
             "AxisRange" : 17.3,
             "LinguisticWeight" : 13

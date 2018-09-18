@@ -1,6 +1,7 @@
 using System.Data;
 using System.Xml.XPath;
 using System.Text.RegularExpressions;
+using B83.ExpressionParser;
 using UnityEngine;
 namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
 {
@@ -20,12 +21,13 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
               string replaceRegex, 
               double ReplacedValue)
       {
-            Regex pattern = new Regex(replaceRegex); 
-            string mathExpression = pattern.Replace(
-                            expression,
-                            ReplacedValue.ToString()
-                            );
-            return Eval.Evaluate(mathExpression);
+            var parser = new ExpressionParser();
+            string mathExpression = Regex.Replace(
+                    expression, 
+                    replaceRegex, 
+                    ReplacedValue.ToString()
+                    );
+            return parser.Evaluate(mathExpression);
       }
       public static float double2Float(double input)
       {

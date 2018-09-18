@@ -6,14 +6,14 @@
     [
         {
             "Name" : "Sleep",
-            "MembershipFunction" : "412+a",
+            "MembershipFunction" : "412+@",
             "StartAxis" : 1,
             "AxisRange" : 17.3,
             "LinguisticWeight" : 13
         },
         {
             "Name" : "Run",
-            "MembershipFunction" : "123+123-a",
+            "MembershipFunction" : "123+123-@",
             "StartAxis" : 1,
             "AxisRange" : 17.3,
             "LinguisticWeight" : 13
