@@ -2,6 +2,8 @@
     "Version" : "0.1",
     "Type" : "Linguistics",
     "LinguisticVariable" : "Level",
+    "MinimumValue" : 0,
+    "RangeLength" : 20,
     "LinguisticValues" : 
     [
         {

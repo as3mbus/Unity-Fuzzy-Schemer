@@ -37,7 +37,8 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                 {
                   ""Name"" : """ + LinguisticName + @""",
                   ""Type"" : """ + Type + @""",
-                  ""Spec"" : [" + string.Join(",",Spec.Select(x=>x.ToString()).ToArray()) + @"]
+                  ""Spec"" : [" + string.Join(",",Spec.Select(x=>x.ToString()).ToArray()) + @"],
+                  ""LinguisticWeight"" : " + testWeight + @"
                 }
                 ";
             TestMF = new MembershipFunction(

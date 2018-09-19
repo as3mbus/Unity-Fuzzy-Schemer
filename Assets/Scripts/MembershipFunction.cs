@@ -29,55 +29,55 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             this.length = xlength;
             this.weight = lweight;
         }
-        public static MembershipFunction Generate(string linguisticVal, string type, double[] spec)
+        public static MembershipFunction Generate(string linguisticVal, string type, double[] spec, double weight)
         {
             switch(type.ToLower())
             {
                 case "triangle" :
-                    return Triangle(linguisticVal, spec[0], spec[1], spec[2]);
+                    return Triangle(linguisticVal, spec[0], spec[1], spec[2], weight);
                 case "trapezoid" :
-                    return Trapezoid(linguisticVal, spec[0], spec[1], spec[2], spec[3]);
+                    return Trapezoid(linguisticVal, spec[0], spec[1], spec[2], spec[3], weight);
                 case "gaussian" :
-                    return Gaussian(linguisticVal, spec[0], spec[1]);
+                    return Gaussian(linguisticVal, spec[0], spec[1], weight);
                 case "bell" :
-                    return Bell(linguisticVal, spec[0], spec[1], spec[2]);
+                    return Bell(linguisticVal, spec[0], spec[1], spec[2], weight);
                 case "sigmoid" :
-                    return Sigmoid(linguisticVal, spec[0], spec[1]);
+                    return Sigmoid(linguisticVal, spec[0], spec[1], weight);
                 case "closedsigmoid" :
-                    return ClosedSigmoid(linguisticVal, spec[0], spec[1], spec[2], spec[3]);
+                    return ClosedSigmoid(linguisticVal, spec[0], spec[1], spec[2], spec[3], weight);
                 default :
                     return null;
             }
         }
-        public static MembershipFunction Triangle(string linguisticVal, double ptA, double ptB, double ptC)
+        public static MembershipFunction Triangle(string linguisticVal, double ptA, double ptB, double ptC, double weight =1)
         {
             string expression = "max(min(((@-"+ptA+")/("+ptB+"-"+ptA+")),(("+ptC+"-@)/("+ptC+"-"+ptB+"))),0)";
-            return new MembershipFunction(linguisticVal, expression, ptA, ptC-ptA);
+            return new MembershipFunction(linguisticVal, expression, ptA, ptC-ptA, weight);
         }
-        public static MembershipFunction Trapezoid(string linguisticVal, double ptA, double ptB, double ptC, double ptD)
+        public static MembershipFunction Trapezoid(string linguisticVal, double ptA, double ptB, double ptC, double ptD, double weight =1)
         {
             string expression = "max(min(min(((@-"+ptA+")/("+ptB+"-"+ptA+")),1),(("+ptD+"-@)/("+ptD+"-"+ptC+"))),0)";
-            return new MembershipFunction(linguisticVal, expression, ptA, ptD-ptA);
+            return new MembershipFunction(linguisticVal, expression, ptA, ptD-ptA, weight);
         }
-        public static MembershipFunction Gaussian(string linguisticVal, double ptC, double ptW)
+        public static MembershipFunction Gaussian(string linguisticVal, double ptC, double ptW, double weight =1)
         {
             string expression = "e^((-(1/2))*(((@-"+ptC+")/"+ptW+")^2))";
-            return new MembershipFunction(linguisticVal, expression, ptC-ptW, ptC+ptW);
+            return new MembershipFunction(linguisticVal, expression, ptC-ptW, ptC+ptW, weight);
         }
-        public static MembershipFunction Bell(string linguisticVal, double ptC, double ptW, double ptB)
+        public static MembershipFunction Bell(string linguisticVal, double ptC, double ptW, double ptB, double weight =1)
         {
             string expression = "1/(1+abs(((@-"+ptC+")/"+ptW+"))^(2*"+ptB+"))";
-            return new MembershipFunction(linguisticVal, expression, ptC-ptW, ptC+ptW);
+            return new MembershipFunction(linguisticVal, expression, ptC-ptW, ptC+ptW, weight);
         }
-        public static MembershipFunction Sigmoid(string linguisticVal, double ptA, double ptC)
+        public static MembershipFunction Sigmoid(string linguisticVal, double ptA, double ptC, double weight =1)
         {
             string expression = "1/(1+e^(("+(-ptA)+")*(@-"+ptC+")))";
-            return new MembershipFunction(linguisticVal, expression, ptC-ptC, ptC+ptC);
+            return new MembershipFunction(linguisticVal, expression, ptC-ptC, ptC+ptC, weight);
         }
-        public static MembershipFunction ClosedSigmoid(string linguisticVal, double ptA, double ptC, double ptA2, double ptC2)
+        public static MembershipFunction ClosedSigmoid(string linguisticVal, double ptA, double ptC, double ptA2, double ptC2, double weight =1)
         {
             string expression = "(1/(1+e^(("+(-Math.Abs(ptA))+")*(@-"+ptC+"))))-(1/(1+e^(("+(-Math.Abs(ptA2))+")*(x-"+ptC2+"))))";
-            return new MembershipFunction(linguisticVal, expression, ptC-ptC, ptC+ptC);
+            return new MembershipFunction(linguisticVal, expression, ptC-ptC, ptC+ptC, weight);
         }
 
         // Json Encode and Decode
@@ -103,7 +103,8 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                 return MembershipFunction.Generate(
                         MFJSO.GetField("Name").str,
                         MFJSO.GetField("Type").str,
-                        specVals.ToArray()
+                        specVals.ToArray(),
+                        MFJSO.GetField("LinguisticWeight").n
                         );
             }
         }

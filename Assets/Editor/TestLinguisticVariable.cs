@@ -8,186 +8,198 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     [TestFixture]
     public class TestLinguisticVariable 
     {
-        string TestJsonLingVar;
-        string testVersion = "0.1";
-        string testType = "Linguistics";
-        string testName = "TestName";
-        double testCrisp = 35.24;
+        string JsonLingVar;
+        string Version = "0.1";
+        string Type = "Linguistics";
+        string Name = "TestName";
+        double Crisp = 35.24;
+        double minVal = 0.3;
+        double RangeLen = 10.5;
         IDefuzzification dfuzz = Defuzzification.WeightedAverage;
-        List<MembershipFunction> testMFs;
-        List<LinguisticRule> testLRs;
+        List<MembershipFunction> MFs;
+        List<LinguisticRule> LRs;
         TextAsset MembershipFunctTextAsset;
-        LinguisticVariable testLinguisticVariable;
+        LinguisticVariable LinguisticVariable;
+        List<LinguisticVariable> LingVars = new List<LinguisticVariable>();
         [SetUp]
         public void setup()
         {
             //TextAsset MembershipFunctTextAsset = 
             //    Resources.Load("MembershipFunctions") as TextAsset;
-            testLinguisticVariable = new LinguisticVariable();
-            testMFs = new List<MembershipFunction>();
-            testLRs= new List<LinguisticRule>();
-            testMFs.Add(new MembershipFunction("EasyFight","@+3"));
-            testMFs.Add(new MembershipFunction("NormalFight","@+10"));
-            testMFs.Add(new MembershipFunction("HardFight","@+15"));
-            testLRs.Add(new LinguisticRule(
+            LinguisticVariable = new LinguisticVariable();
+            MFs = new List<MembershipFunction>();
+            LRs= new List<LinguisticRule>();
+            MFs.Add(new MembershipFunction("EasyFight","@+3", 0,3));
+            MFs.Add(new MembershipFunction("NormalFight","@+10", 4, 5));
+            MFs.Add(new MembershipFunction("HardFight","@+15", 9, 5));
+            LRs.Add(new LinguisticRule(
                         "HardFight",
                         "Health High and Power High",
-                        FuzzyImplication.Gaines,
-                        FuzzyOperator.MinMax));
-            testLRs.Add(new LinguisticRule(
+                        FuzzyImplication.Mamdani,
+                        FuzzyOperator.Probabilistic));
+            LRs.Add(new LinguisticRule(
                         "NormalFight",
                         "Health Low and Power Medium",
                         FuzzyImplication.Godel,
                         FuzzyOperator.Probabilistic));
-            testLRs.Add(new LinguisticRule(
+            LRs.Add(new LinguisticRule(
                         "EasyFight",
                         "Health Medium and Power Low",
                         FuzzyImplication.Gaines,
                         FuzzyOperator.MinMax));
-            TestJsonLingVar = 
+            JsonLingVar = 
 @"
 {
-    ""Version"" : """+ testVersion + @""",
-    ""LinguisticVariable"" : """+ testName + @""",
-    ""Type"" : """+ testType + @""",
+    ""Version"" : """+ Version + @""",
+    ""LinguisticVariable"" : """+ Name + @""",
+    ""Type"" : """+ Type + @""",
+    ""MinimumValue"" : "+ minVal + @",
+    ""RangeLength"" : "+ RangeLen + @",
     ""LinguisticValues"" : 
     [
     ";
-            foreach (MembershipFunction testMF in testMFs)
+            foreach (MembershipFunction MF in MFs)
             {
-                TestJsonLingVar+= testMF.encodeLinguisticJson().Print(true);
-                if (!testMF.Equals(testMFs[testMFs.Count-1]))
-                    TestJsonLingVar+= ",";
+                JsonLingVar+= MF.encodeLinguisticJson().Print(true);
+                if (!MF.Equals(MFs[MFs.Count-1]))
+                    JsonLingVar+= ",";
             }
-            TestJsonLingVar += 
+            JsonLingVar += 
     @"
     ],
     ""LinguisticRule"" : 
     [";
-            foreach (LinguisticRule testLR in testLRs)
+            foreach (LinguisticRule LR in LRs)
             {
-                TestJsonLingVar+= testLR.encodeLinguisticJson().Print(true);
-                if (!testLR.Equals(testLRs[testLRs.Count-1]))
-                    TestJsonLingVar+= ",";
+                JsonLingVar+= LR.encodeLinguisticJson().Print(true);
+                if (!LR.Equals(LRs[LRs.Count-1]))
+                    JsonLingVar+= ",";
             }
-            TestJsonLingVar +=
+            JsonLingVar +=
     @"]
 }
 ";
         }
+        public void ExternalLVSetUp()
+        {
+            LingVars = new List<LinguisticVariable>();
+            UnityEngine.Object[] jsonLing = 
+                Resources.LoadAll(
+                        "TestLinguistics",
+                        typeof(TextAsset)) ;
+            foreach(TextAsset asset in jsonLing)
+                LingVars.Add(LinguisticVariable.fromJson(asset.text));
+            foreach(LinguisticVariable LV in LingVars)
+                LV.Fuzzification(Crisp);
+        }
+
         [Test]
         public void SetUp()
         {
             Debug.Log("[TEST JSON LINGUISTIC VARIABLE]\n"
-                    + TestJsonLingVar);
+                    + JsonLingVar);
         }
         [Test]
         public void ConstructFromJson()
         {
-            testLinguisticVariable = 
-                LinguisticVariable.fromJson(TestJsonLingVar);
+            LinguisticVariable = 
+                LinguisticVariable.fromJson(JsonLingVar);
             Assert.AreEqual(
-                    testVersion,
-                    testLinguisticVariable.JsonVersion);
-            Assert.AreEqual(testName,testLinguisticVariable.Name);
-            foreach (MembershipFunction testMF in testMFs)
+                    Version,
+                    LinguisticVariable.JsonVersion);
+            Assert.AreEqual(Name,LinguisticVariable.Name);
+            foreach (MembershipFunction MF in MFs)
             {
                 Assert.IsTrue(
-                        testLinguisticVariable.membershipFunctions.Exists(
+                        LinguisticVariable.membershipFunctions.Exists(
                             mf=>mf.membershipValue.linguistic.Equals(
-                                testMF.membershipValue.linguistic
+                                MF.membershipValue.linguistic
                                 )
                             )
                         );
                             
                 Assert.AreEqual(
-                        testMF.expression,
-                        testLinguisticVariable.
+                        MF.expression,
+                        LinguisticVariable.
                         membershipFunctions.Find(
                             mf => mf.membershipValue.linguistic.Equals(
-                                testMF.membershipValue.linguistic)
+                                MF.membershipValue.linguistic)
                             ).expression
                         );
             }
-            foreach (LinguisticRule testLR in testLRs)
+            foreach (LinguisticRule LR in LRs)
             {
                 Assert.IsTrue(
-                        testLinguisticVariable.linguisticRules.Exists(
+                        LinguisticVariable.linguisticRules.Exists(
                             lr=>lr.rule.Equals(
-                                testLR.rule
+                                LR.rule
                                 )
                             )
                         );
-                LinguisticRule CorespLR = testLinguisticVariable.linguisticRules.Find(
+                LinguisticRule CorespLR = LinguisticVariable.linguisticRules.Find(
                     mf => mf.membershipValue.linguistic.Equals(
-                        testLR.membershipValue.linguistic)
+                        LR.membershipValue.linguistic)
                     );
-                Assert.AreEqual(testLR.rule, 
+                Assert.AreEqual(LR.rule, 
                         CorespLR.rule);
-                Assert.AreEqual(testLR.implicationM, 
+                Assert.AreEqual(LR.implicationM, 
                         CorespLR.implicationM);
-                Assert.AreEqual(testLR.fOperator, 
+                Assert.AreEqual(LR.fOperator, 
                         CorespLR.fOperator);
             }
         }
+
+
+
         [Test]
         public void Fuzzification()
         {
-            testLinguisticVariable = 
-                LinguisticVariable.fromJson(TestJsonLingVar);
-            testLinguisticVariable.Fuzzification(30);
+            LinguisticVariable = 
+                LinguisticVariable.fromJson(JsonLingVar);
+            LinguisticVariable.Fuzzification(30);
             Assert.AreEqual(
                     45,
-                    testLinguisticVariable.membershipFunctions.Find(
+                    LinguisticVariable.membershipFunctions.Find(
                         mf => mf.membershipValue.linguistic.Equals("HardFight"))
                     .membershipValue.fuzzy
                     );
         }
+
+
+
+
         [Test]
         public void RuleApplication()
         {
-            testLinguisticVariable = 
-                LinguisticVariable.fromJson(TestJsonLingVar);
-            testLinguisticVariable.Fuzzification(30);
-            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
-            UnityEngine.Object[] jsonLing = 
-                Resources.LoadAll(
-                        "TestLinguistics",
-                        typeof(TextAsset)) ;
-            foreach(TextAsset asset in jsonLing)
-                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
-            foreach(LinguisticVariable LV in TestLingVars)
-                LV.Fuzzification(testCrisp);
-            testLinguisticVariable.ApplyRule(TestLingVars);
+            LinguisticVariable = 
+                LinguisticVariable.fromJson(JsonLingVar);
+            ExternalLVSetUp();
+            LinguisticVariable.ApplyRule(LingVars);
             Debug.Log("[Rule Application Result Start]");
-            foreach (LinguisticRule rule in testLinguisticVariable.linguisticRules)
+            foreach (LinguisticRule rule in LinguisticVariable.linguisticRules)
                 Debug.Log(
                         "[Lingusitic] : " + rule.membershipValue.linguistic + "\n"
                         + "[Fuzzy] : " + rule.membershipValue.fuzzy );
             Debug.Log("[ Rule Application Result End ]");
         }
+
+
+
+
         [Test]
         public void Implicate()
         {
-            double axis=0;
-            testLinguisticVariable = 
-                LinguisticVariable.fromJson(TestJsonLingVar);
-            testLinguisticVariable.Fuzzification(30);
-            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
-            UnityEngine.Object[] jsonLing = 
-                Resources.LoadAll(
-                        "TestLinguistics",
-                        typeof(TextAsset)) ;
-            foreach(TextAsset asset in jsonLing)
-                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
-            foreach(LinguisticVariable LV in TestLingVars)
-                LV.Fuzzification(testCrisp);
-            testLinguisticVariable.ApplyRule(TestLingVars);
-            testLinguisticVariable.Implicate(1);
-            foreach(LinguisticRule rule in testLinguisticVariable.linguisticRules)
+            double axis = 0;
+            LinguisticVariable = 
+                LinguisticVariable.fromJson(JsonLingVar);
+            ExternalLVSetUp();
+
+            LinguisticVariable.ApplyRule(LingVars);
+            LinguisticVariable.Implicate(1);
+            foreach(LinguisticRule rule in LinguisticVariable.linguisticRules)
             {
                 Debug.Log("[Implication Result " + rule.membershipValue.linguistic + " Start]");
-                axis =0;
+                axis = rule.implData.StartAxis;
                 foreach(double implRes in rule.implData.data)
                 {
                     Debug.Log("[implRes @" + axis + " ] = " + implRes );
@@ -199,22 +211,22 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [Test]
         public void Defuzzify()
         {
-            testLinguisticVariable = 
-                LinguisticVariable.fromJson(TestJsonLingVar);
-            testLinguisticVariable.Fuzzification(30);
-            List<LinguisticVariable> TestLingVars = new List<LinguisticVariable>();
+            LinguisticVariable = 
+                LinguisticVariable.fromJson(JsonLingVar);
+            LinguisticVariable.Fuzzification(30);
+            List<LinguisticVariable> LingVars = new List<LinguisticVariable>();
             UnityEngine.Object[] jsonLing = 
                 Resources.LoadAll(
                         "TestLinguistics",
                         typeof(TextAsset)) ;
             foreach(TextAsset asset in jsonLing)
-                TestLingVars.Add(LinguisticVariable.fromJson(asset.text));
-            foreach(LinguisticVariable LV in TestLingVars)
-                LV.Fuzzification(testCrisp);
-            testLinguisticVariable.ApplyRule(TestLingVars);
-            testLinguisticVariable.Implicate(1);
+                LingVars.Add(LinguisticVariable.fromJson(asset.text));
+            foreach(LinguisticVariable LV in LingVars)
+                LV.Fuzzification(Crisp);
+            LinguisticVariable.ApplyRule(LingVars);
+            LinguisticVariable.Implicate(1);
             Debug.Log("[Defuzzification Method] : " + Defuzzification.nameOf(dfuzz) );
-            Debug.Log("[Defuzzification Result] : " + dfuzz.defuzzify(testLinguisticVariable.linguisticRules) );
+            Debug.Log("[Defuzzification Result] : " + dfuzz.defuzzify(LinguisticVariable.linguisticRules) );
             
         }
 

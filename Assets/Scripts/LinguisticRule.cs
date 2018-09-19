@@ -145,6 +145,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         public void Implicate(MembershipFunction MF, double space)
         {
             this.implicationData = new ImplicationData();
+            this.implicationData.StartAxis = MF.start;
             this.implicationData.spacing = space;
             this.implicationData.maximum = 0;
             this.implicationData.centerPoint = MF.start+MF.length/2;
