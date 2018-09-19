@@ -80,7 +80,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         {
             foreach (MembershipFunction MF
                     in membershipFunctions)
-                MF.rangeCalculation(this.minimumValue, this.rangeLength, precision, threshold);
+                MF.rangeCalculation(this.minimumValue, this.minimumValue+this.rangeLength, precision, threshold);
             
         }
         public void Fuzzification(double crispValue)

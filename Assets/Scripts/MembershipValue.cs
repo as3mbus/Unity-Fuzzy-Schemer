@@ -3,27 +3,30 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
 {
     public class MembershipValue
     {
-        public MembershipValue(string linguisticValue)
-        {
-            this.linguisticValue = linguisticValue;
-        }
-        public MembershipValue(string linguisticValue, double fuzzyValue)
-            : this(linguisticValue)
-        {
-            this.fuzzyValue = fuzzyValue;
-        }
+        // Private Attribute
         private string linguisticValue;
+        private double fuzzyValue;
+        
+        // Encapsulation and Public Attribute
         public string linguistic 
         {
             get {return linguisticValue;}
             set {linguisticValue = value;}
         }
-        private double fuzzyValue;
         public double fuzzy
         {
             get {return fuzzyValue;}
             set {fuzzyValue = value;}
         }
+
+        // Constructor
+        public MembershipValue(string linguisticValue, double fuzzyValue=-1)
+        {
+            this.linguisticValue = linguisticValue;
+            this.fuzzyValue = fuzzyValue;
+        }
+
+        // Json Parsing
         public JSONObject encodeCompleteJson()
         {
             JSONObject encoded = new JSONObject(JSONObject.Type.OBJECT);

@@ -14,7 +14,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         string Name = "TestName";
         double Crisp = 35.24;
         double minVal = 0.3;
-        double RangeLen = 10.5;
+        double RangeLen = 15.5;
         IDefuzzification dfuzz = Defuzzification.WeightedAverage;
         List<MembershipFunction> MFs;
         List<LinguisticRule> LRs;
@@ -99,6 +99,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Debug.Log("[TEST JSON LINGUISTIC VARIABLE]\n"
                     + JsonLingVar);
         }
+
         [Test]
         public void ConstructFromJson()
         {
@@ -149,7 +150,20 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             }
         }
 
-
+        [Test]
+        public void RangeCalibration()
+        {
+            LinguisticVariable = 
+                LinguisticVariable.fromJson(JsonLingVar);
+            Debug.Log("BEFORE CALIBRATION");
+            foreach(MembershipFunction MF in LinguisticVariable.membershipFunctions)
+                Debug.Log(MF.encodeLinguisticJson());
+            LinguisticVariable.RangeCalibration(1, 0.01);   
+            Debug.Log("AFTER  CALIBRATION");
+            foreach(MembershipFunction MF in LinguisticVariable.membershipFunctions)
+                Debug.Log(MF.encodeLinguisticJson());
+        }
+            
 
         [Test]
         public void Fuzzification()
@@ -165,9 +179,6 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     );
         }
 
-
-
-
         [Test]
         public void RuleApplication()
         {
@@ -182,9 +193,6 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                         + "[Fuzzy] : " + rule.membershipValue.fuzzy );
             Debug.Log("[ Rule Application Result End ]");
         }
-
-
-
 
         [Test]
         public void Implicate()
@@ -213,16 +221,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         {
             LinguisticVariable = 
                 LinguisticVariable.fromJson(JsonLingVar);
-            LinguisticVariable.Fuzzification(30);
-            List<LinguisticVariable> LingVars = new List<LinguisticVariable>();
-            UnityEngine.Object[] jsonLing = 
-                Resources.LoadAll(
-                        "TestLinguistics",
-                        typeof(TextAsset)) ;
-            foreach(TextAsset asset in jsonLing)
-                LingVars.Add(LinguisticVariable.fromJson(asset.text));
-            foreach(LinguisticVariable LV in LingVars)
-                LV.Fuzzification(Crisp);
+            ExternalLVSetUp();
             LinguisticVariable.ApplyRule(LingVars);
             LinguisticVariable.Implicate(1);
             Debug.Log("[Defuzzification Method] : " + Defuzzification.nameOf(dfuzz) );

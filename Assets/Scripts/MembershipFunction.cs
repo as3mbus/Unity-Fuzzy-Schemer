@@ -127,6 +127,23 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         }
 
         // Functions
+        public void rangeCalculation(double min, double max, double precision, double threshold)
+        {
+            double iter=min;
+            double fuzzyVal=0;
+            double recentlyActiveAxis=0;
+            while(iter<=max)
+            {
+                fuzzyVal=Fuzzify(iter);
+                if(fuzzyVal>threshold)
+                    if (this.start>iter)
+                        this.start=iter;
+                    else
+                        recentlyActiveAxis=iter;
+                iter+=precision;
+            }
+            this.length=recentlyActiveAxis-this.start;
+        }
         public void Fuzzification(double crispValue)
         {
             this.membershipValue.fuzzy = Fuzzify(crispValue);
@@ -137,24 +154,6 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                     this.expression,
                     "@",
                     crispValue);
-        }
-        public void rangeCalculation(double min, double max, double precision, double threshold)
-        {
-            double iter=min;
-            double fuzzyVal=0;
-            double recentlyActiveAxis=0;
-            while(iter<=max)
-            {
-                
-                fuzzyVal=Fuzzify(iter);
-                if(fuzzyVal>threshold)
-                    if (this.start>iter)
-                        this.start=iter;
-                    else
-                        recentlyActiveAxis=iter;
-                iter+=precision;
-            }
-            this.length=recentlyActiveAxis-this.start;
         }
 
     }

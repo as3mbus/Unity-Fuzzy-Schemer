@@ -11,6 +11,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
     }
     public class FuzzyImplication
     {
+        // Declaration
         class MamdaniImpl : IFuzzyImplication
         {
             public double Implication(
@@ -133,6 +134,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
             }
         }
 
+        // Objects
         public static IFuzzyImplication Mamdani = new MamdaniImpl(); 
         public static IFuzzyImplication Larson = new LarsonImpl(); 
         public static IFuzzyImplication Lukasiewicz = new LukasiewiczImpl(); 
@@ -142,6 +144,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
         public static IFuzzyImplication KleeneDienes = new KleeneDienesImpl(); 
         public static IFuzzyImplication KleeneDienesLuk = new KleeneDienesLukImpl(); 
 
+        // Factory
         public static IFuzzyImplication TryParse(string name)
         {
             switch (name.ToLower())

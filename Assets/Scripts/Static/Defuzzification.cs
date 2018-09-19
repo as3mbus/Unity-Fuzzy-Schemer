@@ -10,6 +10,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
     }
     public class Defuzzification
     {
+        // Declaration
         class FirstOfMaximaDfuzz : IDefuzzification
         {
             public double defuzzify(List<LinguisticRule> rules)
@@ -97,11 +98,13 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
             }
         }
         
+        // Objects
         public static IDefuzzification FirstOfMaxima = new FirstOfMaximaDfuzz(); 
         public static IDefuzzification LastOfMaxima = new LastOfMaximaDfuzz(); 
         public static IDefuzzification MiddleOfMaxima = new MiddleOfMaximaDfuzz(); 
         public static IDefuzzification WeightedAverage = new WeightedAverageDfuzz(); 
 
+        // Factory
         public static IDefuzzification TryParse(string name)
         {
             switch (name.ToLower())

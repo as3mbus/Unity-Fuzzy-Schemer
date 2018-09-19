@@ -16,6 +16,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
          newString = newString.Replace("/", " div ").Replace("%", " mod ");
          return (double)nav.Evaluate("number(" + newString + ")");
       }
+
       public static double ReplaceNEvaluate(
               string expression, 
               string replaceRegex, 
@@ -29,16 +30,15 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                     );
             return parser.Evaluate(mathExpression);
       }
+
+
       public static float double2Float(double input)
       {
           float result = (float) input;
           if (float.IsPositiveInfinity(result))
-          {
-                  result = float.MaxValue;
-          } else if (float.IsNegativeInfinity(result))
-          {
-                  result = float.MinValue;
-          }
+              result = float.MaxValue;
+           else if (float.IsNegativeInfinity(result))
+              result = float.MinValue;
           return result;
       }
     }
