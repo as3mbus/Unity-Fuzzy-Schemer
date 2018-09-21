@@ -40,7 +40,8 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                     if (max <= rule.implData.maximum)
                     {
                         max = rule.implData.maximum;
-                        maxAxis = rule.implData.MaxAxis[0];
+                        maxAxis = rule.implData.MaxAxis[
+                                rule.implData.MaxAxis.Count-1];
                     }
                 }
                 return maxAxis;
@@ -57,7 +58,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                     if (max <= rule.implData.maximum)
                     {
                         max = rule.implData.maximum;
-                        maxAxis.Add(rule.implData.MaxAxis[0]*rule.implData.spacing);
+                        maxAxis.AddRange(rule.implData.MaxAxis);
                     }
                 }
                 return maxAxis[new System.Random().Next(0,maxAxis.Count-1)];
@@ -74,7 +75,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                     if (max <= rule.implData.maximum)
                     {
                         max = rule.implData.maximum;
-                        maxAxis.Add(rule.implData.MaxAxis[0]*rule.implData.spacing);
+                        maxAxis.AddRange(rule.implData.MaxAxis);
                     }
                 }
                 if(maxAxis.Count%2==0)
@@ -101,6 +102,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
         // Objects
         public static IDefuzzification FirstOfMaxima = new FirstOfMaximaDfuzz(); 
         public static IDefuzzification LastOfMaxima = new LastOfMaximaDfuzz(); 
+        public static IDefuzzification RandomOfMaxima = new RandomOfMaximaDfuzz(); 
         public static IDefuzzification MiddleOfMaxima = new MiddleOfMaximaDfuzz(); 
         public static IDefuzzification WeightedAverage = new WeightedAverageDfuzz(); 
 
@@ -109,13 +111,15 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
         {
             switch (name.ToLower())
             {
-                case "FirstOfMaxima":
+                case "firstofmaxima":
                     return FirstOfMaxima;
-                case "LastOfMaxima":
+                case "lastofmaxima":
                     return LastOfMaxima;
-                case "MiddleOfMaxima":
+                case "randomofmaxima":
+                    return RandomOfMaxima;
+                case "middleofmaxima":
                     return LastOfMaxima;
-                case "WeightedAverage":
+                case "weightedaverage":
                     return WeightedAverage;
                 default :
                     return null;
@@ -127,6 +131,8 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                 return "FirstOfMaxima";
             else if(Implication.Equals(LastOfMaxima))
                 return "LastOfMaxima";
+            else if(Implication.Equals(RandomOfMaxima))
+                return "RandomOfMaxima";
             else if(Implication.Equals(MiddleOfMaxima))
                 return "MiddleOfMaxima";
             else if(Implication.Equals(WeightedAverage))

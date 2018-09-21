@@ -71,25 +71,23 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         [Test]
         public void Generate()
         {
-            Debug.Log(Json2);
             TestMF = MembershipFunction.fromJson(Json2);
             Assert.AreEqual(
                     LinguisticName, 
                     TestMF.membershipValue.linguistic);
             TestMF.Fuzzification(4);
-            Debug.Log("[MF GENERATE RESULT]\n"+ TestMF.encodeCompleteJson().Print(true));
+            Debug.Log("[MF Generate Test Result]\n"+ TestMF.encodeCompleteJson().Print(true));
         }
         [Test]
-        public void RangeCalculation()
+        public void RangeCalibration()
         {
-            Debug.Log(Json2);
             TestMF = MembershipFunction.fromJson(Json2);
             Assert.AreEqual(
                     LinguisticName, 
                     TestMF.membershipValue.linguistic);
             TestMF.Fuzzification(4);
             TestMF.rangeCalculation(1,30,0.1,0.1);
-            Debug.Log("[MF GENERATE RESULT]\n"+ TestMF.encodeCompleteJson().Print(true));
+            Debug.Log("[Range Calibration Test Result]\n"+ TestMF.encodeCompleteJson().Print(true));
         }
         [Test]
         public void Fuzzification()

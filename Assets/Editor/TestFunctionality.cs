@@ -14,7 +14,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         public void testEvaluate()
         {
             var parser = new ExpressionParser();
-            double v = parser.Evaluate("1/(1+e^((-0.1)*(0-10)))");
+            double v = parser.Evaluate("1/2");
             Assert.AreEqual(0.5,v);
         } 
         [Test]

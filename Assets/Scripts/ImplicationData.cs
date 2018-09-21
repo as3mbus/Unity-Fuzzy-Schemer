@@ -1,3 +1,4 @@
+using UnityEngine;
 using System.Collections.Generic;
 namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
 {
@@ -10,5 +11,6 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         public double maximum = 0;
         public List<double> MaxAxis = new List<double>();
         public double centerPoint;
+
     }
 }

@@ -23,6 +23,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                         membershipExpression,
                         "@",
                         nValue);
+                // Debug.Log(fuzzyValue + " Min " + fuzzyMembership);
                 return Math.Min(fuzzyValue,fuzzyMembership);
             }
         }
@@ -37,6 +38,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                         membershipExpression,
                         "@",
                         nValue);
+                // Debug.Log(fuzzyValue + " * " + fuzzyMembership);
                 return fuzzyValue*fuzzyMembership;
             }
         }
@@ -51,6 +53,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                         membershipExpression,
                         "@",
                         nValue);
+               // Debug.Log(1 + " min " + (1-fuzzyValue+fuzzyMembership));
                 return Math.Min(1, 1-fuzzyValue+fuzzyMembership);
             }
         }
@@ -65,6 +68,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                         membershipExpression,
                         "@",
                         nValue);
+               // Debug.Log(fuzzyValue + " <= " + fuzzyMembership + " = 1");
                 if (fuzzyValue <= fuzzyMembership)
                     return 1;
                 else
@@ -82,6 +86,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                         membershipExpression,
                         "@",
                         nValue);
+               // Debug.Log(fuzzyValue + " <= " + fuzzyMembership + " = 1");
                 if (fuzzyValue <= fuzzyMembership)
                     return 1;
                 else
@@ -99,6 +104,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                         membershipExpression,
                         "@",
                         nValue);
+               // Debug.Log(fuzzyValue + " <= " + fuzzyMembership + " = 1");
                 if (fuzzyValue <= fuzzyMembership)
                     return 1;
                 else
@@ -116,6 +122,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Statics
                         membershipExpression,
                         "@",
                         nValue);
+               // Debug.Log((1-fuzzyValue) + " max " + fuzzyMembership );
                 return Math.Max(1-fuzzyValue, fuzzyMembership);
             }
         }

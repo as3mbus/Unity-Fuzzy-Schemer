@@ -29,7 +29,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
             this.length = xlength;
             this.weight = lweight;
         }
-        public static MembershipFunction Generate(string linguisticVal, string type, double[] spec, double weight)
+        public static MembershipFunction Generate(string linguisticVal, string type, double[] spec, double weight =1)
         {
             switch(type.ToLower())
             {
@@ -37,13 +37,13 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                     return Triangle(linguisticVal, spec[0], spec[1], spec[2], weight);
                 case "trapezoid" :
                     return Trapezoid(linguisticVal, spec[0], spec[1], spec[2], spec[3], weight);
-                case "gaussian" :
+                case "gaussian" :   // width, center
                     return Gaussian(linguisticVal, spec[0], spec[1], weight);
-                case "bell" :
+                case "bell" :       // center, width, curve sharpness
                     return Bell(linguisticVal, spec[0], spec[1], spec[2], weight);
-                case "sigmoid" :
+                case "sigmoid" :    // curve, 0.5 axis
                     return Sigmoid(linguisticVal, spec[0], spec[1], weight);
-                case "closedsigmoid" :
+                case "closedsigmoid" :  // curve1, 0.5 axis1, curve2, 0.5 axis2
                     return ClosedSigmoid(linguisticVal, spec[0], spec[1], spec[2], spec[3], weight);
                 default :
                     return null;
@@ -67,7 +67,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         public static MembershipFunction Bell(string linguisticVal, double ptC, double ptW, double ptB, double weight =1)
         {
             string expression = "1/(1+abs(((@-"+ptC+")/"+ptW+"))^(2*"+ptB+"))";
-            return new MembershipFunction(linguisticVal, expression, ptC-ptW, ptC+ptW, weight);
+            return new MembershipFunction(linguisticVal, expression, ptC-ptW*2, ptC+ptW*2, weight);
         }
         public static MembershipFunction Sigmoid(string linguisticVal, double ptA, double ptC, double weight =1)
         {

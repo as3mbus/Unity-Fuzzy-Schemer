@@ -8,24 +8,21 @@
     [
         {
             "Name" : "High",
-            "MembershipFunction" : "100/@+3",
-            "StartAxis" : 1,
-            "AxisRange" : 17.3,
-            "LinguisticWeight" : 13
+            "Type" : "Triangle",
+            "Spec" : [12,15,23],
+            "LinguisticWeight" : 20
         },
         {
             "Name" : "Medium",
-            "MembershipFunction" : "257+@-300/3",
-            "StartAxis" : 1,
-            "AxisRange" : 17.3,
+            "Type" : "Trapezoid",
+            "Spec" : [5,7,9,12],
             "LinguisticWeight" : 13
         },
         {
             "Name" : "Low",
-            "MembershipFunction" : "135*@-27",
-            "StartAxis" : 1,
-            "AxisRange" : 17.3,
-            "LinguisticWeight" : 13
+            "Type" : "Triangle",
+            "Spec" : [-1,3,5],
+            "LinguisticWeight" : 5
         }
     ]
 }

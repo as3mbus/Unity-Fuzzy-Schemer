@@ -12,10 +12,10 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         string Version = "0.1";
         string Type = "Linguistics";
         string Name = "TestName";
-        double Crisp = 35.24;
+        double Crisp = 15;
         double minVal = 0.3;
         double RangeLen = 15.5;
-        IDefuzzification dfuzz = Defuzzification.WeightedAverage;
+        IDefuzzification dfuzz = Defuzzification.RandomOfMaxima;
         List<MembershipFunction> MFs;
         List<LinguisticRule> LRs;
         TextAsset MembershipFunctTextAsset;
@@ -29,23 +29,23 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             LinguisticVariable = new LinguisticVariable();
             MFs = new List<MembershipFunction>();
             LRs= new List<LinguisticRule>();
-            MFs.Add(new MembershipFunction("EasyFight","@+3", 0,3));
-            MFs.Add(new MembershipFunction("NormalFight","@+10", 4, 5));
-            MFs.Add(new MembershipFunction("HardFight","@+15", 9, 5));
+            MFs.Add(MembershipFunction.Generate("EasyFight","Triangle",new double[]{-1,3,5},5));
+            MFs.Add(MembershipFunction.Generate("NormalFight","Trapezoid",new double[]{4,5,9,11},9));
+            MFs.Add(MembershipFunction.Generate("HardFight","Triangle",new double[]{10,15,17},15));
             LRs.Add(new LinguisticRule(
                         "HardFight",
                         "Health High and Power High",
-                        FuzzyImplication.Mamdani,
+                        FuzzyImplication.Lukasiewicz,
                         FuzzyOperator.Probabilistic));
             LRs.Add(new LinguisticRule(
                         "NormalFight",
                         "Health Low and Power Medium",
-                        FuzzyImplication.Godel,
+                        FuzzyImplication.KleeneDienes,
                         FuzzyOperator.Probabilistic));
             LRs.Add(new LinguisticRule(
                         "EasyFight",
                         "Health Medium and Power Low",
-                        FuzzyImplication.Gaines,
+                        FuzzyImplication.Larson,
                         FuzzyOperator.MinMax));
             JsonLingVar = 
 @"
@@ -155,13 +155,32 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         {
             LinguisticVariable = 
                 LinguisticVariable.fromJson(JsonLingVar);
-            Debug.Log("BEFORE CALIBRATION");
-            foreach(MembershipFunction MF in LinguisticVariable.membershipFunctions)
-                Debug.Log(MF.encodeLinguisticJson());
             LinguisticVariable.RangeCalibration(1, 0.01);   
-            Debug.Log("AFTER  CALIBRATION");
+            string LogMsg = "{Range Calibration Test Result]\n";
+            LogMsg += string.Format(
+                    "{0,-15}\t| {1,-15}{2,-15}\t| {3,-15}{4,-15}\n", 
+                    "Linguistic", 
+                    "Start",
+                    "",
+                    "length",
+                    ""
+                    );
+            LogMsg += "=============== <Before> / <After> ===============\n";
             foreach(MembershipFunction MF in LinguisticVariable.membershipFunctions)
-                Debug.Log(MF.encodeLinguisticJson());
+            {
+                MembershipFunction PreCalib = MFs.Find(
+                        x=>
+                        x.membershipValue.linguistic == MF.membershipValue.linguistic);
+                LogMsg += string.Format(
+                        "{0,-15}\t| {1,15} / {2,-15}\t| {3,15} / {4,-15}\n", 
+                        MF.membershipValue.linguistic, 
+                        PreCalib.start,
+                        MF.start,
+                        PreCalib.length,
+                        MF.length
+                        );
+            }
+            Debug.Log(LogMsg);
         }
             
 
@@ -170,9 +189,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         {
             LinguisticVariable = 
                 LinguisticVariable.fromJson(JsonLingVar);
-            LinguisticVariable.Fuzzification(30);
+            LinguisticVariable.Fuzzification(15);
             Assert.AreEqual(
-                    45,
+                    1,
                     LinguisticVariable.membershipFunctions.Find(
                         mf => mf.membershipValue.linguistic.Equals("HardFight"))
                     .membershipValue.fuzzy
@@ -186,12 +205,13 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                 LinguisticVariable.fromJson(JsonLingVar);
             ExternalLVSetUp();
             LinguisticVariable.ApplyRule(LingVars);
-            Debug.Log("[Rule Application Result Start]");
+            string LogMsg = "[Rule Application Test Result]\n";
             foreach (LinguisticRule rule in LinguisticVariable.linguisticRules)
-                Debug.Log(
-                        "[Lingusitic] : " + rule.membershipValue.linguistic + "\n"
-                        + "[Fuzzy] : " + rule.membershipValue.fuzzy );
-            Debug.Log("[ Rule Application Result End ]");
+                LogMsg += string.Format(
+                        "{0,-15}\t|\t{1,-25}\n", 
+                        rule.membershipValue.linguistic, 
+                        rule.membershipValue.fuzzy );
+            Debug.Log(LogMsg);
         }
 
         [Test]
@@ -201,20 +221,26 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             LinguisticVariable = 
                 LinguisticVariable.fromJson(JsonLingVar);
             ExternalLVSetUp();
+            string LogMsg = "[Implicate Test Result]\n==================================\n";
+            string TmpLog ;
 
             LinguisticVariable.ApplyRule(LingVars);
             LinguisticVariable.Implicate(1);
             foreach(LinguisticRule rule in LinguisticVariable.linguisticRules)
             {
-                Debug.Log("[Implication Result " + rule.membershipValue.linguistic + " Start]");
+                TmpLog = "Linguistic : " + rule.membershipValue.linguistic + "\n";
+                TmpLog += "Implication Method : " + FuzzyImplication.nameOf(rule.implicationM) + "\n";
+                TmpLog +="Axis\t| Implication\n";
                 axis = rule.implData.StartAxis;
                 foreach(double implRes in rule.implData.data)
                 {
-                    Debug.Log("[implRes @" + axis + " ] = " + implRes );
+                    TmpLog += axis + "\t| " + implRes + "\n";
                     axis+= rule.implData.spacing;
                 }
-                Debug.Log("[ Implication Result " + rule.membershipValue.linguistic + " End ]");
+                LogMsg += TmpLog+ "==================================\n" ;
+                TmpLog = "";
             }
+            Debug.Log(LogMsg);
         }
         [Test]
         public void Defuzzify()
@@ -224,8 +250,10 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             ExternalLVSetUp();
             LinguisticVariable.ApplyRule(LingVars);
             LinguisticVariable.Implicate(1);
-            Debug.Log("[Defuzzification Method] : " + Defuzzification.nameOf(dfuzz) );
-            Debug.Log("[Defuzzification Result] : " + dfuzz.defuzzify(LinguisticVariable.linguisticRules) );
+            Debug.Log(
+                    "[Defuzzification Test Result]\n" +
+                    "Method : " + Defuzzification.nameOf(dfuzz) + 
+                    " | Result : " + dfuzz.defuzzify(LinguisticVariable.linguisticRules));
             
         }
 

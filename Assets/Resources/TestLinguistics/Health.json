@@ -3,29 +3,26 @@
     "Type" : "Linguistics",
     "LinguisticVariable" : "Health",
     "MinimumValue" : 0,
-    "RangeLength" : 20,
+    "RangeLength" : 10,
     "LinguisticValues" : 
     [
         {
             "Name" : "High",
-            "MembershipFunction" : "30-@/20",
-            "StartAxis" : 1,
-            "AxisRange" : 17.3,
-            "LinguisticWeight" : 13
+            "Type" : "Sigmoid",
+            "Spec" : [1,7.5],
+            "LinguisticWeight" : 10
         },
         {
             "Name" : "Medium",
-            "MembershipFunction" : "@*3+2+1",
-            "StartAxis" : 1,
-            "AxisRange" : 17.3,
-            "LinguisticWeight" : 13
+            "Type" : "ClosedSigmoid",
+            "Spec" : [1,4.5,1,7],
+            "LinguisticWeight" : 7
         },
         {
             "Name" : "Low",
-            "MembershipFunction" : "32-70",
-            "StartAxis" : 1,
-            "AxisRange" : 17.3,
-            "LinguisticWeight" : 13
+            "Type" : "Gaussian",
+            "Spec" : [0,4],
+            "LinguisticWeight" : 4
         }
     ]
 }

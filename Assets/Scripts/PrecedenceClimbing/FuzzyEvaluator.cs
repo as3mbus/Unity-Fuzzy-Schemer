@@ -134,10 +134,10 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.PrecedenceClimbing
             {
                 case "and" :
                     //Debug.Log("[calc And] " + lhs +" and " + rhs);
-                    return fuzzyOpr.Union(lhs,rhs);
+                    return fuzzyOpr.Intersection(lhs,rhs);
                 case "or" :
                     //Debug.Log("[calc or] " + lhs +" and " + rhs);
-                    return fuzzyOpr.Intersection(lhs,rhs);
+                    return fuzzyOpr.Union(lhs,rhs);
                 default:
                     return 0;
             }

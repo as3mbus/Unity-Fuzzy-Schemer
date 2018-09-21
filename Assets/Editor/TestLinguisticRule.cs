@@ -20,9 +20,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         
         List<LinguisticVariable> TestLingVars;
 
-        double fuzzificationTestValue = 35.24;
-        double testNVal = 0.01;
-        MembershipFunction testMF = new MembershipFunction("Sleep", "23+2/@");       
+        double fuzzificationTestValue = 17;
+        double testNVal = 11;
+        MembershipFunction testMF = MembershipFunction.Generate("Sleep", "Trapezoid", new double[]{5,8,10,12}, 12);       
 
 
         [SetUp]
@@ -133,7 +133,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             MFSetup();
-            Debug.Log("[Numeric Rule Result] = " + testRule.numericRule(TestLingVars));
+            Debug.Log("[Numeric Rule Test Result] = " + testRule.numericRule(TestLingVars));
         }
         [Test]
         public void Apply()
@@ -141,7 +141,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             testRule = LinguisticRule.fromJson(TestJsonRule);
             MFSetup();
             testRule.Apply(TestLingVars);
-            Debug.Log("[applied rule  result] : " + testRule.membershipValue.fuzzy);
+            Debug.Log("[Rule Application Test Resut] : " + testRule.membershipValue.fuzzy);
         }
         [Test]
         public void Implication()
@@ -158,15 +158,13 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             testRule = LinguisticRule.fromJson(TestJsonRule);
             MFSetup();
             testRule.Apply(TestLingVars);
-
-            testMF.start = 2;
-            testMF.length = 5;
-
             testRule.Implicate(testMF, 1);
-            Debug.Log("[Implication Result Start]");
-            foreach (double impRes in testRule.implData.data)
-                Debug.Log("[ImpRes] : " + impRes);
-            Debug.Log("[ Implication Result End ]");
+            
+            string LogMsg = "[Implicate Test Result]\n";
+            for (int i=0;i< testRule.implData.data.Count; i++)
+                LogMsg+= "Index " + (testRule.implData.StartAxis+testRule.implData.spacing*i) + 
+                    " -> " + testRule.implData.data[i]+"\n";
+            Debug.Log(LogMsg);
         }
     }
 }

@@ -163,7 +163,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
                     this.implicationData.MaxAxis.Clear();
                 }
                 if (nImplication == this.implicationData.maximum)
-                    this.implicationData.MaxAxis.Add(nImplication);
+                    this.implicationData.MaxAxis.Add(n);
                 implicationData.data.Add(nImplication);
                 n+=space;
             }
