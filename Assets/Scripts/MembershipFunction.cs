@@ -67,7 +67,7 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.Objects
         public static MembershipFunction Bell(string linguisticVal, double ptC, double ptW, double ptB, double weight =1)
         {
             string expression = "1/(1+abs(((@-"+ptC+")/"+ptW+"))^(2*"+ptB+"))";
-            return new MembershipFunction(linguisticVal, expression, ptC-ptW*2, ptC+ptW*2, weight);
+            return new MembershipFunction(linguisticVal, expression, ptC-ptW*2, ptW*4, weight);
         }
         public static MembershipFunction Sigmoid(string linguisticVal, double ptA, double ptC, double weight =1)
         {
