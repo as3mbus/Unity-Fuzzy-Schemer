@@ -9,19 +9,20 @@ using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
     [TestFixture]
-    public class TestLinguisticRule
+    public class T3LinguisticRule
     {
-        IFuzzyOperator TestOperator = FuzzyOperator.MinMax;
-        IFuzzyImplication TestImplication = FuzzyImplication.Larson;
         string testRuleValue = "Sleep";
         string testActualRule =  "not Power High or Hunger Low";
+        IFuzzyOperator TestOperator = FuzzyOperator.MinMax;
+        IFuzzyImplication TestImplication = FuzzyImplication.Larson;
         LinguisticRule testRule;
+
         string TestJsonRule ; 
-        
         List<LinguisticVariable> TestLingVars;
 
         double fuzzificationTestValue = 17;
         double testNVal = 11;
+
         MembershipFunction testMF = MembershipFunction.Generate("Sleep", "Trapezoid", new double[]{5,8,10,12}, 12);       
 
 
@@ -53,14 +54,14 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             }
         }
         [Test]
-        public void Construct()
+        public void T1Construct()
         {
             testRule = new LinguisticRule(testRuleValue, testActualRule);
             Assert.AreEqual(testRule.rule,
                     testActualRule);
         }
         [Test]
-        public void ConstructComplete()
+        public void T2ConstructComplete()
         {
             testRule = new LinguisticRule(testRuleValue, testActualRule, TestImplication, TestOperator);
             Assert.AreEqual(testRule.rule,
@@ -69,7 +70,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Assert.AreEqual(testRule.implicationM, TestImplication);
         }
         [Test]
-        public void ParseJson()
+        public void T3ParseJson()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             Assert.AreEqual(
@@ -81,6 +82,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Assert.AreEqual(
                     testActualRule,
                     testRule.rule);
+            Debug.Log("[Test Rule]\n" + testRule.encodeLinguisticJson().Print(true));
         }
         /*
         [Test]
@@ -104,8 +106,9 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     0.01d);
         }
         */
+
         [Test]
-        public void LinguisticEncode()
+        public void T4LinguisticEncode()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             Assert.AreEqual(
@@ -128,15 +131,17 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     testRule.encodeLinguisticJson().GetField("Rule").str
                     );
         }
+
         [Test]
-        public void NumericRule()
+        public void T5NumericRule()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             MFSetup();
             Debug.Log("[Numeric Rule Test Result] = " + testRule.numericRule(TestLingVars));
         }
+
         [Test]
-        public void Apply()
+        public void T6RuleApply()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             MFSetup();
@@ -144,16 +149,16 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Debug.Log("[Rule Application Test Resut] : " + testRule.membershipValue.fuzzy);
         }
         [Test]
-        public void Implication()
+        public void T7Implication()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             MFSetup();
             testRule.Apply(TestLingVars);
 
-            Debug.Log("[Implication Result] : " + testRule.Implication(testNVal, testMF));
+            Debug.Log("[Implication Result at Index " + testNVal + "] : " + testRule.Implication(testNVal, testMF));
         }
         [Test]
-        public void Implicate()
+        public void T8Implicate()
         {
             testRule = LinguisticRule.fromJson(TestJsonRule);
             MFSetup();

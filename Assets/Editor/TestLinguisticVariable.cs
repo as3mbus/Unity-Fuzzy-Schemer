@@ -6,7 +6,7 @@ using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
     [TestFixture]
-    public class TestLinguisticVariable 
+    public class T4LinguisticVariable 
     {
         string JsonLingVar;
         string Version = "0.1";
@@ -15,7 +15,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         double Crisp = 15;
         double minVal = 0.3;
         double RangeLen = 15.5;
-        IDefuzzification dfuzz = Defuzzification.RandomOfMaxima;
+        IDefuzzification dfuzz = Defuzzification.WeightedAverage;
         List<MembershipFunction> MFs;
         List<LinguisticRule> LRs;
         TextAsset MembershipFunctTextAsset;
@@ -94,14 +94,14 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         }
 
         [Test]
-        public void SetUp()
+        public void T1SetUp()
         {
             Debug.Log("[TEST JSON LINGUISTIC VARIABLE]\n"
                     + JsonLingVar);
         }
 
         [Test]
-        public void ConstructFromJson()
+        public void T2ConstructFromJson()
         {
             LinguisticVariable = 
                 LinguisticVariable.fromJson(JsonLingVar);
@@ -151,7 +151,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         }
 
         [Test]
-        public void RangeCalibration()
+        public void T3RangeCalibration()
         {
             LinguisticVariable = 
                 LinguisticVariable.fromJson(JsonLingVar);
@@ -185,10 +185,11 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             
 
         [Test]
-        public void Fuzzification()
+        public void T4Fuzzification()
         {
             LinguisticVariable = 
                 LinguisticVariable.fromJson(JsonLingVar);
+            LinguisticVariable.RangeCalibration(1, 0.01);   
             LinguisticVariable.Fuzzification(15);
             Assert.AreEqual(
                     1,
@@ -199,7 +200,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         }
 
         [Test]
-        public void RuleApplication()
+        public void T5RuleApplication()
         {
             LinguisticVariable = 
                 LinguisticVariable.fromJson(JsonLingVar);
@@ -215,11 +216,12 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
         }
 
         [Test]
-        public void Implicate()
+        public void T6Implicate()
         {
             double axis = 0;
             LinguisticVariable = 
                 LinguisticVariable.fromJson(JsonLingVar);
+            LinguisticVariable.RangeCalibration(1, 0.01);   
             ExternalLVSetUp();
             string LogMsg = "[Implicate Test Result]\n==================================\n";
             string TmpLog ;
@@ -243,10 +245,11 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Debug.Log(LogMsg);
         }
         [Test]
-        public void Defuzzify()
+        public void T8Defuzzify()
         {
             LinguisticVariable = 
                 LinguisticVariable.fromJson(JsonLingVar);
+            LinguisticVariable.RangeCalibration(1, 0.01);   
             ExternalLVSetUp();
             LinguisticVariable.ApplyRule(LingVars);
             LinguisticVariable.Implicate(1);

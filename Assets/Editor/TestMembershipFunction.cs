@@ -7,7 +7,7 @@ using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
     [TestFixture]
-    public class TestMembershipFunction
+    public class T2MembershipFunction
     {
         MembershipFunction TestMF;
         string LinguisticName = "High";
@@ -46,7 +46,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     Expression);
         }
         [Test]
-        public void Construct()
+        public void T1Construct()
         {
             TestMF = new MembershipFunction(
                     LinguisticName, 
@@ -57,7 +57,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Assert.AreEqual(Expression, TestMF.expression);
         }
         [Test]
-        public void JsonConstruct()
+        public void T2JsonConstruct()
         {
             TestMF = MembershipFunction.fromJson(Json1);
             Assert.AreEqual(
@@ -67,19 +67,20 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Assert.AreEqual(StartX, TestMF.start);
             Assert.AreEqual(LengthX, TestMF.length);
             Assert.AreEqual(testWeight, TestMF.weight);
+            Debug.Log("[Construct Test MF Json]\n" + TestMF.encodeCompleteJson().Print(true));
         }
         [Test]
-        public void Generate()
+        public void T3Generate()
         {
             TestMF = MembershipFunction.fromJson(Json2);
             Assert.AreEqual(
                     LinguisticName, 
                     TestMF.membershipValue.linguistic);
             TestMF.Fuzzification(4);
-            Debug.Log("[MF Generate Test Result]\n"+ TestMF.encodeCompleteJson().Print(true));
+            Debug.Log("[Generate Test MF Result]\n"+ TestMF.encodeCompleteJson().Print(true));
         }
         [Test]
-        public void RangeCalibration()
+        public void T4RangeCalibration()
         {
             TestMF = MembershipFunction.fromJson(Json2);
             Assert.AreEqual(
@@ -90,7 +91,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             Debug.Log("[Range Calibration Test Result]\n"+ TestMF.encodeCompleteJson().Print(true));
         }
         [Test]
-        public void Fuzzification()
+        public void T5Fuzzification()
         {
             TestMF.Fuzzification(CrispVal);
             Assert.AreEqual(
@@ -100,7 +101,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     TestMF.membershipValue.fuzzy); 
         }
         [Test]
-        public void CompleteEncode()
+        public void T6CompleteEncode()
         {
             TestMF = new MembershipFunction(
                     LinguisticName, Expression);
@@ -120,7 +121,7 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
                     0.01d);
         }
         [Test]
-        public void LinguisticEncode()
+        public void T7LinguisticEncode()
         {
             TestMF = new MembershipFunction(
                     LinguisticName, Expression);

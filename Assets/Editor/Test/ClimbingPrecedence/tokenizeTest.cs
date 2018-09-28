@@ -51,7 +51,8 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test.ClimbingPrecedence
             string testString = "not 23.5 or ( 3.5 and 0.004 ) and ( 32 or ( 0.3 and 0.012 ) )";
             Tokenizer tokened = Tokenizer.tokenize(testString);
             double result = FuzzyEvaluator.computeExpr(tokened, 1, FuzzyOperator.Probabilistic, false);
-            Debug.Log("[Calculation Result] : " + result);
+            Debug.Log("[Fuzzy Evaluator Calculation Test Result] \n" + 
+                    testString + " = " + result);
         }
     }
 }

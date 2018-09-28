@@ -4,7 +4,7 @@ using as3mbus.OpenFuzzyScenario.Scripts.Statics;
 namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
     [TestFixture]
-    public class TestMembershipValue
+    public class T1MembershipValue
     {
         MembershipValue TestValue;
         string TestLinguisticValue = "High";

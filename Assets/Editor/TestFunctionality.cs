@@ -8,7 +8,7 @@ using B83.ExpressionParser;
 namespace as3mbus.OpenFuzzyScenario.Editor.Test
 {
     [TestFixture]
-    public class TestFunctional
+    public class T0Functional
     {
         [Test]
         public void testEvaluate()
@@ -16,16 +16,6 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
             var parser = new ExpressionParser();
             double v = parser.Evaluate("1/2");
             Assert.AreEqual(0.5,v);
-        } 
-        [Test]
-        public void testCustomFunction()
-        {
-            var parser = new ExpressionParser();
-            parser.AddFunc("and" , (p) =>
-                    {
-                    return FuzzyOperator.MinMax.Union(p[0],p[1]);
-                    }
-                    );
         } 
         [Test]
         public void testReplaceAndEvaluate()
