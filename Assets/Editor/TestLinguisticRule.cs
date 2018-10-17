@@ -12,8 +12,8 @@ namespace as3mbus.OpenFuzzyScenario.Editor.Test
     public class T3LinguisticRule
     {
         string testRuleValue = "Sleep";
-        string testActualRule =  "not Power High or Hunger Low";
-        IFuzzyOperator TestOperator = FuzzyOperator.MinMax;
+        string testActualRule =  "Health High and Power High or Hunger Low and Health Medium";
+        IFuzzyOperator TestOperator = FuzzyOperator.Probabilistic;
         IFuzzyImplication TestImplication = FuzzyImplication.Larson;
         LinguisticRule testRule;
 

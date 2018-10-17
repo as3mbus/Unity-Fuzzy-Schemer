@@ -20,8 +20,8 @@ namespace as3mbus.OpenFuzzyScenario.Scripts.PrecedenceClimbing
         static readonly Dictionary<string, OpInfo> OpInfo_Map
             = new Dictionary<string, OpInfo>
             {
-                { "and", new OpInfo(1,"LEFT")  },
-                { "or", new OpInfo(2,"LEFT")  }
+                { "and", new OpInfo(2,"LEFT")  },
+                { "or", new OpInfo(1,"LEFT")  }
             };
         public static double computeAtom(
                 Tokenizer tokenized, 
